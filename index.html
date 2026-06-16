@@ -4,17 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PaperLab — Offline PDF Toolkit</title>
-<meta name="description" content="PaperLab — offline PDF toolkit. No uploads, runs entirely in your browser.">
+<meta name="description" content="PaperLab — offline PDF toolkit. Merge, split, compress & more. No uploads, runs entirely in your browser.">
 <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+<div class="gradient-bg"></div>
+<div class="noise"></div>
+
 <header>
   <div class="topbar">
-    <div class="brand"><span class="dot"></span><b>Paper<span class="lab">Lab</span></b></div>
-    <div class="tag">
+    <div class="brand"><span class="mk">▤</span>Paper<span class="lab">Lab</span></div>
+    <div class="nav-tag">
       <span class="pill"><b>100%</b> offline</span>
       <span class="pill">no uploads</span>
-      <span class="pill">runs in browser</span>
       <span class="vchip" id="vchip">
         <span class="vlive"><span class="vdot"></span>Live</span>
         <span class="vbig loading" id="totalCount">&mdash;</span>
@@ -26,30 +28,49 @@
 
 <div class="wrap">
   <section class="hero">
-    <h1>PDF toolkit</h1>
-    <p>Every operation runs locally on your machine. Files never leave the browser — nothing is uploaded, stored, or sent anywhere. <span class="crumb">paperlab.eknathalabs.com</span></p>
+    <div class="hl">
+      <span class="badge-pill"><span class="blip"></span> your files never leave this tab</span>
+      <h1>PDF tools that <span class="grad">just work</span>, instantly.</h1>
+      <p class="lede"><b>Merge, split, compress, convert</b> &mdash; every operation runs on your own machine. No uploads, no signup, no waiting. Drag the slider to watch a page get stamped live.</p>
+      <div class="cta-row">
+        <button class="btn-primary" id="startBtn">Start with a PDF &rarr;</button>
+        <span class="sub"><b>11</b> tools &middot; <b>0</b> uploads</span>
+      </div>
+    </div>
+    <div class="demo">
+      <div class="frame" id="frame">
+        <canvas id="demoCv"></canvas>
+        <span class="lbl raw">before</span>
+        <span class="lbl done">after</span>
+        <div class="handle" id="demoHandle"><div class="knob">&#8646;</div></div>
+      </div>
+      <div class="cap">&uarr; real-time PDF processing, drag to compare</div>
+    </div>
   </section>
-  <main class="grid" id="grid"></main>
+
+  <div id="primary"></div>
+  <main id="grid"></main>
 </div>
 
 <footer>
   <div class="wrap">
-    Part of the <b>EknathaLabs</b> ecosystem · offline-first, zero-dependency tools · <a href="https://eknathalabs.com">eknathalabs.com</a>
+    Part of the <b>EknathaLabs</b> ecosystem &middot; offline-first tools &middot; <a href="https://eknathalabs.com">eknathalabs.com</a>
+    <div class="sib">sibling project &mdash; <a href="https://imagelab.eknathalabs.com">ImageLab</a>, the image toolkit</div>
   </div>
 </footer>
 
 <div class="ws" id="ws" role="dialog" aria-modal="true">
   <div class="ws-inner">
     <div class="ws-head">
-      <span class="ico" id="wsIco">▸</span>
+      <span class="ico" id="wsIco">&#9656;</span>
       <h2 id="wsTitle">Tool</h2>
-      <button class="x" id="wsClose" aria-label="Close">✕</button>
+      <button class="x" id="wsClose" aria-label="Close">&#10005;</button>
     </div>
     <div class="ws-body" id="wsBody"></div>
   </div>
 </div>
 
-<!-- third-party engines (swap to vendor/ for true zero-network) -->
+<!-- PDF engines -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
@@ -70,8 +91,9 @@
 <script src="js/tools/extract.js"></script>
 <script src="js/tools/meta.js"></script>
 
-<!-- app boot (runs after tools registered) -->
+<!-- app boot + hero demo + visitors -->
 <script src="js/app.js"></script>
+<script src="js/hero-demo.js"></script>
 <script src="js/visitors.js"></script>
 </body>
 </html>
