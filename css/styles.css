@@ -141,3 +141,17 @@ textarea.extract-out{width:100%;height:200px;background:var(--bg);border:1px sol
   .ws-inner{border-radius:0;min-height:100vh;max-width:100%}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ============ visitor counter — gradient-ring live chip ============ */
+@keyframes vpulse{0%,100%{opacity:1}50%{opacity:.35}}
+.vchip{display:inline-flex;align-items:center;gap:9px;padding:5px 8px 5px 13px;border-radius:30px;
+  border:1px solid transparent;
+  background:linear-gradient(var(--panel),var(--panel)) padding-box,
+            linear-gradient(120deg,#4ade9b,#34d399 55%,#10b981) border-box;
+  font-family:var(--mono);line-height:1}
+.vchip .vlive{display:flex;align-items:center;gap:6px;font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-dim)}
+.vchip .vdot{width:6px;height:6px;border-radius:50%;background:#4ade9b;box-shadow:0 0 8px rgba(74,222,155,.85);animation:vpulse 1.8s ease-in-out infinite;flex-shrink:0}
+.vchip .vbig{font-size:14px;font-weight:700;background:linear-gradient(120deg,#4ade9b,#10b981);-webkit-background-clip:text;background-clip:text;color:transparent}
+.vchip .vbig.loading{-webkit-text-fill-color:var(--ink-faint);color:var(--ink-faint)}
+.vchip .vtoday{background:rgba(74,222,155,.14);border-radius:20px;padding:3px 9px;font-size:10.5px;color:var(--acc);font-weight:600;white-space:nowrap}
+@media(max-width:680px){.vchip{display:none}}
