@@ -72,7 +72,10 @@ window.PaperLab = window.PaperLab || { tools: {} };
     const rr = /\/Root\s+(\d+)\s+\d+\s+R/g, ir = /\/Info\s+(\d+)\s+\d+\s+R/g;
     while ((m = rr.exec(s))) rootHint = +m[1];
     while ((m = ir.exec(s))) infoHint = +m[1];
-    return { s, u8, hdr, recs, rootHint, infoHint, encrypted: enc, issues };
+    // page count the document itself claims (largest /Count of a root-level /Pages node)
+    let declared = 0;
+    recs.forEach(r => { if (r.type === 'Pages' && !/\/Parent\s+\d/.test(r.dict)) { const c = /\/Count\s+(\d+)/.exec(r.dict); if (c && +c[1] > declared) declared = +c[1]; } });
+    return { s, u8, hdr, recs, rootHint, infoHint, encrypted: enc, issues, declared };
   };
 
   function inflate(bytes) {
@@ -238,10 +241,20 @@ window.PaperLab = window.PaperLab || { tools: {} };
   }
 
   /* last resort: draw each page pdf.js can still render into an image */
+  /* true when a rendered page has no visible ink at all (sampled on a 48×64 thumbnail) */
+  function isWhite(cv) {
+    try {
+      const t = document.createElement('canvas'); t.width = 48; t.height = 64;
+      const x = t.getContext('2d', { willReadFrequently: true }); x.fillStyle = '#fff'; x.fillRect(0, 0, 48, 64); x.drawImage(cv, 0, 0, 48, 64);
+      const d = x.getImageData(0, 0, 48, 64).data;
+      for (let i = 0; i < d.length; i += 4) if (d[i] < 245 || d[i + 1] < 245 || d[i + 2] < 245) return false;
+      return true;
+    } catch (e) { return false; }
+  }
   async function viaImages(bytes, ctx, prog) {
     const { PDFDocument } = PL.lib();
     let pdf; try { pdf = await PL.openPdfjs(bytes); } catch (e) { return null; }
-    const out = await PDFDocument.create(); let n = 0; const lost = [];
+    const out = await PDFDocument.create(); let n = 0, empty = 0; const lost = [];
     try {
       for (let i = 1; i <= pdf.numPages; i++) {
         PL.abortIf(ctx); prog(i / pdf.numPages, 'drawing page ' + i + '/' + pdf.numPages);
@@ -249,6 +262,7 @@ window.PaperLab = window.PaperLab || { tools: {} };
           const pg = await pdf.getPage(i);
           const base = pg.getViewport({ scale: 1 });
           const { cv } = await PL.renderPage(pg, 2, PL.env.maxCanvasPx);
+          if (isWhite(cv)) empty++;
           const blob = await PL.canvasToBlob(cv, 'image/jpeg', 0.85); PL.freeCanvas(cv);
           const img = await out.embedJpg(new Uint8Array(await blob.arrayBuffer()));
           const page = out.addPage([base.width, base.height]); page.drawImage(img, { x: 0, y: 0, width: base.width, height: base.height });
@@ -256,19 +270,32 @@ window.PaperLab = window.PaperLab || { tools: {} };
         } catch (e) { if (e && e.name === 'AbortError') throw e; lost.push(i - 1); }
       }
     } finally { pdf.destroy(); }
-    return n ? { bytes: await out.save(), pages: n, lost } : null;
+    return n ? { bytes: await out.save(), pages: n, empty, lost } : null;
   }
 
   /* ───────── damaged-data handling ───────── */
-  function flateOk(c) {
-    const f = window.fflate;
-    try { f.unzlibSync(c); return true; } catch (e) { /* try raw deflate */ }
-    try { f.inflateSync(c.subarray(2)); return true; } catch (e) { return false; }
+  function adler32(u) {
+    let a = 1, b = 0;
+    for (let i = 0; i < u.length;) { const e = Math.min(i + 3800, u.length); for (; i < e; i++) { a += u[i]; b += a; } a %= 65521; b %= 65521; }
+    return ((b << 16) | a) >>> 0;
+  }
+  /* A Flate stream is healthy only if it inflates AND its zlib checksum matches (fflate skips the checksum, which is
+     how silently-corrupted data slips through). */
+  function flateOk(c) {                                   // → 'ok' | 'suspect' (inflates, checksum differs) | 'bad' (cannot inflate)
+    const f = window.fflate; let out = null;
+    try { out = f.unzlibSync(c); } catch (e) { out = null; }
+    if (!out) { try { f.inflateSync(c.subarray(2)); } catch (e) { return 'bad'; } return 'ok'; }   // headerless: no checksum to verify
+    const sum = adler32(out);
+    for (let k = 0; k <= 3 && c.length - 4 - k >= 2; k++) {                // tolerate up to 3 trailing EOL/padding bytes
+      const o = c.length - 4 - k;
+      if ((((c[o] << 24) | (c[o + 1] << 16) | (c[o + 2] << 8) | c[o + 3]) >>> 0) === sum) return 'ok';
+    }
+    return 'suspect';
   }
   /* Every Flate stream must actually decompress. Broken ones are replaced by a valid empty stream so the file is
      structurally sound everywhere (viewers stop reporting errors); the page that used it is reported as blank/damaged. */
   function sanitize(doc) {
-    const L = PL.lib(), f = window.fflate, bad = new Set();
+    const L = PL.lib(), f = window.fflate, bad = new Set(); bad.sus = new Set();
     const empty = f.zlibSync(new Uint8Array(0));
     doc.context.enumerateIndirectObjects().forEach(([ref, obj]) => {
       if (!(obj instanceof L.PDFRawStream)) return;
@@ -277,22 +304,95 @@ window.PaperLab = window.PaperLab || { tools: {} };
       const flt = obj.dict.get(L.PDFName.of('Filter'));
       const first = flt instanceof L.PDFArray ? flt.get(0) : flt;
       if (!first || !first.asString || first.asString() !== '/FlateDecode') return;
-      const c = obj.contents; if (!c || !c.length || flateOk(c)) return;
+      const c = obj.contents; if (!c || !c.length) return;
+      const st = flateOk(c); if (st === 'ok') return;
+      if (st === 'suspect') { bad.sus.add(ref.tag); return; }
       obj.dict.set(L.PDFName.of('Length'), L.PDFNumber.of(empty.length));
       doc.context.assign(ref, L.PDFRawStream.of(obj.dict, empty));
       bad.add(ref.tag);
     });
     return bad;
   }
-  /* per page: 'ok' | 'damaged' (some content gone) | 'blank' (all content gone) */
+  /* How many objects a page needs (fonts, images, forms, …) are missing or were blanked? Looks 3 levels deep. */
+  function missingResources(doc, pg, bad, detail) {
+    const L = PL.lib(); let miss = 0;
+    const look = o => (o instanceof L.PDFRef) ? doc.context.lookup(o) : o;
+    const gone = r => r instanceof L.PDFRef && (!doc.context.lookup(r) || bad.has(r.tag) || (bad.sus && bad.sus.has(r.tag)));
+    const seen = new Set();
+    function walk(o, depth, soft) {
+      if (depth > 3 || !o) return;
+      if (o instanceof L.PDFRef) { if (seen.has(o.tag)) return; seen.add(o.tag); if (gone(o)) { if (soft) { missingResources.soft = (missingResources.soft || 0) + 1; return; } miss++; if (detail) detail.push(o.tag + (doc.context.lookup(o) ? ' (blanked)' : ' (absent)')); return; } }
+      const d = look(o); if (!d) return;
+      const dict = d instanceof L.PDFRawStream ? d.dict : d instanceof L.PDFDict ? d : null;
+      if (d instanceof L.PDFArray) { d.asArray().forEach(x => walk(x, depth + 1, soft)); return; }
+      if (!dict) return;
+      ['FontDescriptor', 'FontFile', 'FontFile2', 'FontFile3', 'DescendantFonts', 'ToUnicode', 'Encoding', 'SMask'].forEach(k => { const v = dict.get(L.PDFName.of(k)); if (v) walk(v, depth + 1, soft || /^FontFile/.test(k)); });
+    }
+    let res = null;
+    try { res = pg.node.Resources(); } catch (e) { res = null; }
+    if (!res) return 0;
+    ['Font', 'XObject'].forEach(cat => {
+      const sub = look(res.get(L.PDFName.of(cat)));
+      if (sub instanceof L.PDFDict) sub.entries().forEach(([, v]) => {
+        walk(v, 1);
+        if (cat !== 'Font') return;
+        const fd = look(v); if (!(fd instanceof L.PDFDict)) { miss++; return; }
+        const st = fd.get(L.PDFName.of('Subtype')), bf = fd.get(L.PDFName.of('BaseFont'));
+        if (!st || !/^\/(Type0|Type1|TrueType|Type3|MMType1)$/.test(st.asString ? st.asString() : '') || (bf && bf.asString && /#(0[0-9A-Fa-f]|1[0-9A-Fa-f]|7[Ff]|[89A-Fa-f][0-9A-Fa-f])/.test(bf.asString()))) { miss++; if (detail) detail.push('font dict ' + (v.tag || '') + ' malformed'); }
+      });
+    });
+    return miss;
+  }
+  /* Binary junk outside strings in a page's content stream = the stream was damaged (e.g. bytes inserted into an uncompressed stream). */
+  function streamJunk(doc, ref) {
+    const L = PL.lib(), o = doc.context.lookup(ref);
+    if (!(o instanceof L.PDFRawStream) || !o.contents) return 0;
+    let u = o.contents;
+    const flt = o.dict.get(L.PDFName.of('Filter'));
+    if (flt) {
+      const first = flt instanceof L.PDFArray ? flt.get(0) : flt;
+      if (!first || !first.asString || first.asString() !== '/FlateDecode' || (flt instanceof L.PDFArray && flt.size() > 1)) return 0;
+      try { u = window.fflate.unzlibSync(u); } catch (e) { try { u = window.fflate.inflateSync(u.subarray(2)); } catch (e2) { return 0; } }
+    }
+    if (u.length > 3e6) return 0;
+    let junk = 0, i = 0; const n = u.length;
+    const text = (b) => b === 9 || b === 10 || b === 12 || b === 13 || b === 0 || (b >= 32 && b < 127);
+    while (i < n) {
+      const b = u[i];
+      if (b === 40) {                                    // ( literal string, balanced, with escapes
+        let depth = 1, j = i + 1;
+        for (; j < n && depth > 0 && j - i < 20000; j++) { const c = u[j]; if (c === 92) j++; else if (c === 40) depth++; else if (c === 41) depth--; }
+        if (depth > 0) { junk += 20; break; }
+        i = j; continue;
+      }
+      if (b === 60 && u[i + 1] === 60) { i += 2; continue; }   // << dictionary
+      if (b === 60) {                                    // < hex string >
+        let j = i + 1;
+        for (; j < n && u[j] !== 62 && j - i < 20000; j++) { const c = u[j]; if (!((c >= 48 && c <= 57) || (c >= 65 && c <= 70) || (c >= 97 && c <= 102) || c <= 32)) junk++; }
+        i = j + 1; continue;
+      }
+      if (b === 66 && u[i + 1] === 73 && u[i + 2] <= 32 && (i === 0 || u[i - 1] <= 32)) return 0;   // inline image: binary is legal
+      if (!text(b)) junk++;
+      i++;
+    }
+    return junk;
+  }
+  /* per page: 'ok' | 'damaged' (some content / fonts / images gone) | 'blank' (all page content gone) */
   function contentHealth(doc, bad) {
     const L = PL.lib();
     return doc.getPages().map(pg => {
-      const c = pg.node.get(L.PDFName.of('Contents')); if (!c) return 'ok';
-      const list = c instanceof L.PDFArray ? c.asArray() : [c];
-      let n = 0;
-      list.forEach(r => { if (r instanceof L.PDFRef && (!doc.context.lookup(r) || bad.has(r.tag))) n++; });
-      return n === 0 ? 'ok' : n === list.length ? 'blank' : 'damaged';
+      const c = pg.node.get(L.PDFName.of('Contents'));
+      let n = 0, total = 0, susp = 0;
+      if (c) {
+        const list = c instanceof L.PDFArray ? c.asArray() : [c];
+        total = list.length;
+        list.forEach(r => { if (r instanceof L.PDFRef && (!doc.context.lookup(r) || bad.has(r.tag))) n++; });
+        if (bad.sus) list.forEach(r => { if (r instanceof L.PDFRef && bad.sus.has(r.tag)) susp++; });
+      }
+      if (c && n === total) return 'blank';
+      if (n > 0 || susp > 0 || missingResources(doc, pg, bad) > 0) return 'damaged';
+      if (c) { const list = c instanceof L.PDFArray ? c.asArray() : [c]; let j = 0; list.forEach(r => { if (r instanceof L.PDFRef) j += streamJunk(doc, r); }); if (j > 8) return 'damaged'; }
+      return 'ok';
     });
   }
   async function polish(doc, big) {
@@ -315,15 +415,17 @@ window.PaperLab = window.PaperLab || { tools: {} };
       const iss = (extra || issues).slice();
       if (pol.blanked) iss.push(pol.blanked + ' damaged data stream(s) could not be decompressed and were blanked');
       if (blank) iss.push(blank + ' page(s) are blank — their content was cut off or corrupted and cannot be recovered');
-      if (dmg) iss.push(dmg + ' page(s) lost part of their content');
-      const c = { bytes: out, recovered: v.pages - blank, total: Math.max(total || 0, v.pages), strategy, note, issues: iss, blank, dmg, images: false };
+      if (dmg) iss.push(dmg + ' page(s) may show damage (missing fonts/images or corrupted data) — check them');
+      const c = { bytes: out, recovered: v.pages - blank - dmg, kept: v.pages - blank, total: Math.max(total || 0, v.pages, (diag && diag.declared) || 0), strategy, note, issues: iss, blank, dmg, images: false };
       cands.push(c); return c;
     };
     const done = c => {
+      if (c.issues.length && c.strategy !== 'images' && diag && diag.s && /\/(DCTDecode|JPXDecode)/.test(diag.s)) c.issues.push('Scanned/photo pages can only be checked structurally — look through them for visual glitches');
       if (!c.issues.length) c.issues.push('No structural problems found — wrote a clean copy');
-      const rp = { strategy: c.strategy, issues: c.issues, total: c.total, recovered: c.recovered, lost: [], images: c.images, blank: c.blank };
+      const kept = c.kept == null ? c.recovered : c.kept;
+      const rp = { strategy: c.strategy, issues: c.issues, total: c.total, recovered: kept, damaged: c.dmg || 0, lost: [], images: c.images, blank: c.blank };
       return { bytes: c.bytes, ext: 'pdf', report: rp,
-        note: c.note + ' · ' + c.recovered + (c.total !== c.recovered ? '/' + c.total : '') + ' page' + (c.recovered === 1 ? '' : 's') };
+        note: c.note + ' · ' + kept + (c.total !== kept ? '/' + c.total : '') + ' page' + (kept === 1 ? '' : 's') + (c.dmg ? ' (' + c.dmg + ' may show damage)' : '') };
     };
     const perfect = c => c.blank === 0 && c.dmg === 0 && c.recovered > 0;
 
@@ -385,7 +487,7 @@ window.PaperLab = window.PaperLab || { tools: {} };
     // pick the best candidate: most real pages, then fewest damaged
     if (cands.length) {
       cands.sort((a, b) => (b.recovered - a.recovered) || (a.dmg - b.dmg));
-      if (cands[0].recovered > 0) return done(cands[0]);
+      if (cands[0].recovered + cands[0].dmg > 0) return done(cands[0]);
     }
 
     // 4 ── redraw as images
@@ -394,8 +496,13 @@ window.PaperLab = window.PaperLab || { tools: {} };
       let r = await viaImages(srcBytes, ctx, (f, m) => prog(0.75 + f * 0.23, m));
       if (!r && srcBytes !== bytes) r = await viaImages(bytes, ctx, (f, m) => prog(0.75 + f * 0.23, m));
       if (r) {
-        const iss = issues.slice(); iss.push('Pages were redrawn as images — text is no longer selectable (run Searchable to restore it)');
-        return done({ bytes: r.bytes, recovered: r.pages, total: r.pages + r.lost.length, strategy: 'images', note: 'Rebuilt pages as images', issues: iss, blank: 0, dmg: 0, images: true });
+        const good = r.pages - r.empty;
+        if (good > 0 || !cands.length) {
+          if (!good) throw new Error('Could not recover any readable pages from this file');
+          const iss = issues.slice(); iss.push('Pages were redrawn as images — text is no longer selectable (run Searchable to restore it)');
+          if (r.empty) iss.push(r.empty + ' page(s) came out empty — their content was cut off or corrupted and cannot be recovered');
+          return done({ bytes: r.bytes, recovered: good, total: Math.max(r.pages + r.lost.length, (diag && diag.declared) || 0), strategy: 'images', note: 'Rebuilt pages as images', issues: iss, blank: r.empty, dmg: 0, images: true });
+        }
       }
     }
     throw new Error('Could not recover any pages from this file');

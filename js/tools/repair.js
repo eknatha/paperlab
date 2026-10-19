@@ -38,11 +38,11 @@
         const buf = new Uint8Array(await PL.readArrayBuffer(file));
         const r = await PL.repair.repair(buf, { images: root.querySelector('#r_img').checked }, { signal: ac.signal, name: file.name, progress: (f, m) => { setBar(f); log.set('Repairing — ' + m + '…'); } });
         setBar(1);
-        const rp = r.report, partial = rp.total && rp.recovered < rp.total;
+        const rp = r.report, partial = (rp.total && rp.recovered < rp.total) || rp.damaged > 0;
         res.style.display = ''; res.className = 'result ' + (partial || rp.images ? 'warn' : 'good');
         res.innerHTML = '<div class="rsz"><b class="to"></b></div><div class="rnote"></div><ul class="issues"></ul>';
         res.querySelector('.to').textContent = rp.recovered + (rp.total && rp.total !== rp.recovered ? ' of ' + rp.total : '') + ' page' + (rp.recovered === 1 ? '' : 's') + ' recovered';
-        res.querySelector('.rnote').textContent = (STRAT[rp.strategy] || rp.strategy) + ' · ' + PL.fmtBytes(file.size) + ' → ' + PL.fmtBytes(r.bytes.length);
+        res.querySelector('.rnote').textContent = (STRAT[rp.strategy] || rp.strategy) + (rp.damaged ? ' · ' + rp.damaged + ' page' + (rp.damaged === 1 ? '' : 's') + ' may show damage' : '') + ' · ' + PL.fmtBytes(file.size) + ' → ' + PL.fmtBytes(r.bytes.length);
         const ul = res.querySelector('.issues');
         rp.issues.forEach(t => { const li = PL.el('li'); li.textContent = t; ul.appendChild(li); });
         out.appendChild(PL.download(r.bytes, file.name.replace(/\.[^.]*$/, '') + '-repaired.pdf'));

@@ -21,7 +21,7 @@ window.PaperLab = window.PaperLab || { tools: {} };
   const fontBytes = {};
   async function loadFontBytes(script) {
     if (!fontBytes[script]) {
-      const url = 'vendor/fonts/' + FONT_FILES[script] + '-Regular.woff?v=20261019b';
+      const url = 'vendor/fonts/' + FONT_FILES[script] + '-Regular.woff?v=20261019c';
       fontBytes[script] = fetch(url).then(r => {
         if (!r.ok) throw new Error('Font file missing: ' + url);
         return r.arrayBuffer();
