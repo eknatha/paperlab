@@ -41,11 +41,13 @@ window.PaperLab = window.PaperLab || { tools: {} };
     if (u8[0] === 0xFF && u8[1] === 0xD8) return 'jpg';
     if (u8[0] === 0x89 && u8[1] === 0x50 && u8[2] === 0x4E && u8[3] === 0x47) return 'png';
     if (head.slice(0, 4) === 'RIFF' && head.slice(8, 12) === 'WEBP') return 'webp';
+    if (u8[0] === 0x50 && u8[1] === 0x4B && (u8[2] === 3 || u8[2] === 5) ) return 'zip';          // EPUB / CBZ are ZIP containers
     return null;
   };
 
   PL.friendlyError = function (e) {
     const m = (e && (e.message || e.name || String(e))) || 'Unknown error';
+    if (/\b(EPUB|CBZ|ZIP archive|DRM)\b/.test(m)) return m;                    // e-book / comic messages are already user-facing
     if (e && e.name === 'AbortError') return 'Cancelled';
     if (e && e.name === 'PasswordException' || /encrypt|password/i.test(m)) return 'Password-protected PDF — remove the password first';
     if (/Failed to parse|No PDF header|Invalid PDF|InvalidPDF|bad XRef|Missing PDF|not a valid/i.test(m)) return 'Not a valid PDF (damaged or wrong file type)';

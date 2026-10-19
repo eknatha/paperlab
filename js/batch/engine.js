@@ -12,7 +12,7 @@ window.PaperLab = window.PaperLab || { tools: {} };
   let seq = 0;
 
   /* ───────── collecting files (drop, picker, folders) ───────── */
-  const EXT = { pdf: /\.pdf$/i, image: /\.(jpe?g|png|webp)$/i };
+  const EXT = { pdf: /\.pdf$/i, image: /\.(jpe?g|png|webp)$/i, epub: /\.epub$/i, cbz: /\.(cbz|zip)$/i };
   B.matches = function (name, accepts) { return accepts.some(k => EXT[k].test(name)); };
 
   B.makeItem = function (file, path) {
@@ -98,9 +98,10 @@ window.PaperLab = window.PaperLab || { tools: {} };
       try {
         const buf = new Uint8Array(await it.file.arrayBuffer());
         if (!buf.length) throw new Error('Empty file (0 bytes)');
-        const kind = PL.sniff(buf);
-        if (!kind || (op.accepts.indexOf(kind === 'jpg' || kind === 'png' || kind === 'webp' ? 'image' : kind) < 0)) {
-          throw new Error(kind ? 'Unsupported for this operation (' + kind.toUpperCase() + ')' : 'Not a PDF or image (wrong file type or corrupted)');
+        const kind = op.anyInput ? 'pdf' : PL.sniff(buf);       // anyInput: the op diagnoses damaged / headerless files itself
+        const zipOk = kind === 'zip' && (op.accepts.indexOf('epub') >= 0 || op.accepts.indexOf('cbz') >= 0);
+        if (!kind || (!zipOk && op.accepts.indexOf(kind === 'jpg' || kind === 'png' || kind === 'webp' ? 'image' : kind) < 0)) {
+          throw new Error(kind ? 'Unsupported for this operation (' + kind.toUpperCase() + ')' : 'Not a valid ' + (op.accepts.indexOf('epub') >= 0 ? 'EPUB' : op.accepts.indexOf('cbz') >= 0 ? 'CBZ / ZIP' : 'PDF or image') + ' (wrong file type or corrupted)');
         }
         const ctx = {
           signal: ac.signal, name: it.name,

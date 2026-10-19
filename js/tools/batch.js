@@ -2,7 +2,7 @@
    Engine: js/batch/engine.js · Sinks: js/batch/sink.js · Operations: js/ops.js + js/ocr/searchable.js */
 (function (PL) {
   const B = PL.batch;
-  const GROUPS = ['Optimize', 'Pages', 'Mark', 'Read'];
+  const GROUPS = ['Optimize', 'Pages', 'Mark', 'Read', 'Fix', 'Books & comics'];
 
   PL.register('batch', function (root) {
     root.classList.add('batch');
@@ -32,7 +32,8 @@
       optHost.innerHTML = ''; optHost.appendChild(F.el);
       opNote.style.display = op.note ? '' : 'none'; opNote.textContent = op.note || '';
       conc.querySelector('option[value="0"]').textContent = 'Auto (' + B.autoConcurrency(op) + ')';
-      dropHint.textContent = op.accepts.indexOf('image') >= 0 ? 'PDFs and images (JPG / PNG / WebP) · folders welcome' : 'PDF files · folders welcome';
+      const W = { pdf: 'PDFs', image: 'images (JPG / PNG / WebP)', epub: 'EPUB e-books', cbz: 'CBZ / ZIP comics' };
+      dropHint.textContent = op.accepts.map(k => W[k]).join(' and ') + (PL.env.mobile ? '' : ' · folders welcome');
       refreshApplicable(); renderSummary();
     }
 
@@ -44,7 +45,7 @@
     const addDir = PL.el('button', 'btn ghost', 'Add folder'); addDir.type = 'button';
     pickRow.appendChild(addFiles);
     const fileInp = PL.el('input'); fileInp.type = 'file'; fileInp.multiple = true; fileInp.style.display = 'none';
-    fileInp.accept = '.pdf,application/pdf,image/jpeg,image/png,image/webp';
+    fileInp.accept = '.pdf,application/pdf,image/jpeg,image/png,image/webp,.epub,.cbz,.zip';
     const dirInp = PL.el('input'); dirInp.type = 'file'; dirInp.multiple = true; dirInp.style.display = 'none';
     dirInp.setAttribute('webkitdirectory', ''); dirInp.setAttribute('directory', '');
     const dirOk = 'webkitdirectory' in dirInp && !PL.env.mobile;
@@ -73,7 +74,7 @@
     function addMany(entries) {
       let ignored = 0;
       entries.forEach(({ file, path }) => {
-        if (!B.matches(file.name, ['pdf', 'image'])) { ignored++; return; }
+        if (!B.matches(file.name, ['pdf', 'image', 'epub', 'cbz'])) { ignored++; return; }
         const key = path + '|' + file.size + '|' + file.lastModified;
         if (seen.has(key)) return;
         seen.add(key);
@@ -94,8 +95,8 @@
       const sk = items.length - act.length, bytes = act.reduce((n, i) => n + i.size, 0);
       sum.textContent = items.length
         ? act.length + ' file' + (act.length === 1 ? '' : 's') + ' · ' + PL.fmtBytes(bytes) +
-          (sk ? ' · ' + sk + ' not applicable' : '') + (ignored ? ' · ' + ignored + ' ignored (not PDF/image)' : '')
-        : (ignored ? ignored + ' ignored (not PDF/image)' : 'No files yet');
+          (sk ? ' · ' + sk + ' not applicable' : '') + (ignored ? ' · ' + ignored + ' ignored (unsupported type)' : '')
+        : (ignored ? ignored + ' ignored (unsupported type)' : 'No files yet');
       start.disabled = running || !act.length; clear.disabled = running || !items.length;
     }
 

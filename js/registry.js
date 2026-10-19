@@ -13,6 +13,7 @@ window.PaperLab.registry = [
   { id: 'searchable', ico: '⌕', t: 'Searchable (OCR)', d: 'Scanned PDFs & photos → searchable PDF. Hindi, Telugu, Tamil, Bengali + 10 more languages.' },
   { id: 'batch',      ico: '⧉', t: 'Mass Batch',       d: 'Compress, OCR, watermark or merge hundreds of files at once. No limits.' },
   { id: 'compare',    ico: '⇋', t: 'Compare PDFs',     d: 'See exactly what changed — words and pixels — between two versions.' },
+  { id: 'repair',     ico: '✚', t: 'Repair PDF',       d: 'Fix files that will not open: broken index, cut-off download, damaged pages. Keeps every page it can read.' },
 
   { g: 'Pages' },
   { id: 'organize', ico: '⇅', t: 'Organize',     d: 'Reorder, delete, duplicate & rotate pages visually.' },
@@ -22,9 +23,10 @@ window.PaperLab.registry = [
   { g: 'Convert' },
   { id: 'img2pdf',  ico: '▤', t: 'Images → PDF', d: 'Build a PDF from JPEG / PNG / WebP images.' },
   { id: 'pdf2img',  ico: '▥', t: 'PDF → Images', d: 'Export each page as a PNG or JPEG.' },
+  { id: 'books',    ico: '❡', t: 'E-books & comics', d: 'EPUB ⇄ PDF and CBZ ⇄ PDF. Keeps text selectable, adds bookmarks. DRM-free files only.' },
 
   { g: 'Mark & inspect' },
-  { id: 'watermark', ico: '※', t: 'Watermark',     d: 'Stamp text across every page, tiled or single.' },
+  { id: 'watermark', ico: '※', t: 'Watermark',     d: 'Visible text across every page, or an invisible per-recipient tracking mark — plus a checker to read it back.' },
   { id: 'extract',   ico: '¶', t: 'Extract text',  d: 'Pull selectable text out of a PDF.' },
   { id: 'meta',      ico: 'ⓘ', t: 'Metadata',      d: 'View, edit, or strip document metadata.' }
 ];

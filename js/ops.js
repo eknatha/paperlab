@@ -62,34 +62,44 @@ window.PaperLab = window.PaperLab || { tools: {} };
     }
   };
 
-  /* ───────────── watermark ───────────── */
+  /* ───────────── watermark (visible, invisible tracking mark, or both) ───────────── */
   ops.watermark = {
     id: 'watermark', label: 'Watermark', group: 'Mark', accepts: ['pdf'], suffix: '-watermarked', ext: 'pdf',
     fields: [
-      { id: 'txt', label: 'Text', type: 'text', value: 'CONFIDENTIAL' },
-      { id: 'op', label: 'Opacity', type: 'select', value: '0.15', options: [['0.15', 'Subtle'], ['0.3', 'Medium'], ['0.5', 'Strong']] },
-      { id: 'ly', label: 'Layout', type: 'select', value: 'diag', options: [['diag', 'Diagonal'], ['tile', 'Tiled']] },
-      { id: 'sz', label: 'Size', type: 'select', value: '48', options: [['48', 'Medium'], ['72', 'Large'], ['32', 'Small']] }
+      { id: 'mode', label: 'Type', type: 'select', value: 'visible', options: [['visible', 'Visible text'], ['invisible', 'Invisible tracking mark'], ['both', 'Visible + invisible']] },
+      { id: 'txt', label: 'Text', type: 'text', value: 'CONFIDENTIAL', showNotIf: ['mode', 'invisible'] },
+      { id: 'op', label: 'Opacity', type: 'select', value: '0.15', options: [['0.15', 'Subtle'], ['0.3', 'Medium'], ['0.5', 'Strong']], showNotIf: ['mode', 'invisible'] },
+      { id: 'ly', label: 'Layout', type: 'select', value: 'diag', options: [['diag', 'Diagonal'], ['tile', 'Tiled']], showNotIf: ['mode', 'invisible'] },
+      { id: 'sz', label: 'Size', type: 'select', value: '48', options: [['48', 'Medium'], ['72', 'Large'], ['32', 'Small']], showNotIf: ['mode', 'invisible'] },
+      { id: 'tag', label: 'Invisible tag (recipient / ID — blank = file name)', type: 'text', value: '', showNotIf: ['mode', 'visible'] }
     ],
     async run(bytes, o, ctx) {
       const { PDFDocument, degrees, rgb, StandardFonts } = PL.lib();
       const doc = await PDFDocument.load(bytes, { ignoreEncryption: !!o.lenient });
       const font = await doc.embedFont(StandardFonts.HelveticaBold);
-      // Helvetica can only encode WinAnsi; drop anything else instead of crashing the file
-      const ok = new Set(font.getCharacterSet());
-      const txt = Array.from(o.txt || 'WATERMARK').filter(c => ok.has(c.codePointAt(0))).join('') || 'WATERMARK';
-      const op = +o.op || 0.15, sz = +o.sz || 48, ly = o.ly || 'diag';
-      doc.getPages().forEach(p => {
-        const { width: w, height: h } = p.getSize();
-        const opts = { size: sz, font, color: rgb(.5, .5, .5), opacity: op };
-        if (ly === 'diag') {
-          p.drawText(txt, { ...opts, x: w * 0.12, y: h * 0.45, rotate: degrees(35) });
-        } else {
-          const tw = font.widthOfTextAtSize(txt, sz) + 40, th = sz + 50;
-          for (let y = 20; y < h; y += th) for (let x = -20; x < w; x += tw) p.drawText(txt, { ...opts, x, y, rotate: degrees(20) });
-        }
-      });
-      return { bytes: await doc.save() };
+      const mode = o.mode || 'visible', vis = mode !== 'invisible', inv = mode !== 'visible';
+      if (vis) {
+        // Helvetica can only encode WinAnsi; drop anything else instead of crashing the file
+        const ok = new Set(font.getCharacterSet());
+        const txt = Array.from(o.txt || 'WATERMARK').filter(c => ok.has(c.codePointAt(0))).join('') || 'WATERMARK';
+        const op = +o.op || 0.15, sz = +o.sz || 48, ly = o.ly || 'diag';
+        doc.getPages().forEach(p => {
+          const { width: w, height: h } = p.getSize();
+          const opts = { size: sz, font, color: rgb(.5, .5, .5), opacity: op };
+          if (ly === 'diag') {
+            p.drawText(txt, { ...opts, x: w * 0.12, y: h * 0.45, rotate: degrees(35) });
+          } else {
+            const tw = font.widthOfTextAtSize(txt, sz) + 40, th = sz + 50;
+            for (let y = 20; y < h; y += th) for (let x = -20; x < w; x += tw) p.drawText(txt, { ...opts, x, y, rotate: degrees(20) });
+          }
+        });
+      }
+      let tag = '';
+      if (inv) {
+        tag = String(o.tag || '').trim() || String((ctx && ctx.name) || 'document').replace(/\.pdf$/i, '');
+        PL.mark.apply(doc, font, tag);
+      }
+      return { bytes: await doc.save(), tag, note: inv ? 'invisible tag “' + tag + '”' : undefined };
     }
   };
 

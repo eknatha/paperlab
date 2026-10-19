@@ -21,7 +21,7 @@ window.PaperLab = window.PaperLab || { tools: {} };
   const fontBytes = {};
   async function loadFontBytes(script) {
     if (!fontBytes[script]) {
-      const url = 'vendor/fonts/' + FONT_FILES[script] + '-Regular.woff';
+      const url = 'vendor/fonts/' + FONT_FILES[script] + '-Regular.woff?v=20261019b';
       fontBytes[script] = fetch(url).then(r => {
         if (!r.ok) throw new Error('Font file missing: ' + url);
         return r.arrayBuffer();
@@ -47,6 +47,7 @@ window.PaperLab = window.PaperLab || { tools: {} };
     return 'latin';
   }
   OCR._scriptOfCode = scriptOfCode;
+  OCR._loadFontBytes = loadFontBytes;
 
   /* The text layer is INVISIBLE, so glyph shapes never matter — only that copy / search get the right Unicode.
      fontkit's shaper would hurt: it reorders Indic vowel signs (विशाल → िवशाल in extracted text), and its GPOS code
@@ -74,6 +75,7 @@ window.PaperLab = window.PaperLab || { tools: {} };
     };
     font._plain = script;
   }
+  OCR._plainEncoding = plainEncoding;
 
   /* One FontSet per output document; fonts embed lazily, only when a word needs them. */
   class FontSet {

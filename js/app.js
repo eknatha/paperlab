@@ -15,6 +15,7 @@
     wsTitle.textContent = tool.t;
     wsIco.textContent = tool.ico;
     wsBody.innerHTML = '';
+    if (PL.caution) wsBody.appendChild(PL.caution(tool.id));          // responsible-use notice, always on top
     ws.classList.add('open');
     document.body.classList.add('ws-open');             // stop the page behind the sheet from scrolling (mobile)
     ws.scrollTop = 0;
@@ -102,4 +103,5 @@
     if (!item.soon) activate(c, item);
     (curGrid || grid).appendChild(c);
   });
+  if (PL.initEthicsBar) PL.initEthicsBar();
 })(window.PaperLab);
