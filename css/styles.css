@@ -309,3 +309,25 @@ textarea{width:100%;background:var(--bg);border:1px solid var(--line-bright);col
   .result .rsz .to{font-size:18px}
 }
 @media (hover:none){.ptool:hover,.card:hover,.btn:hover{transform:none}}
+
+/* ============ responsible-use notices, repair report, recipients box ============ */
+.caution{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;line-height:1.5;color:#fde7b0;background:rgba(245,158,11,.09);border:1px solid rgba(245,158,11,.38);border-radius:10px;padding:10px 13px;margin:0 0 14px}
+.caution .cico{color:#fbbf24;font-size:15px;line-height:1.3;flex:none}
+.caution b{color:#fff3d1}
+.caution a{color:#fcd34d;text-decoration:underline;text-underline-offset:2px;white-space:nowrap}
+.ethics-bar{background:rgba(245,158,11,.09);border-bottom:1px solid rgba(245,158,11,.3);font-size:13px;color:#fde7b0}
+.ethics-bar[hidden]{display:none}
+.ethics-bar .wrap{display:flex;gap:14px;align-items:center;justify-content:space-between;padding-top:9px;padding-bottom:9px}
+.ethics-bar a{color:#fcd34d;text-decoration:underline;text-underline-offset:2px}
+.ethics-bar .btn{flex:none}
+footer .legal{margin-top:10px;font-size:12px;color:var(--ink-faint);line-height:1.5}
+footer .legal a{color:var(--ink-dim);text-decoration:underline;text-underline-offset:2px}
+.result .issues{margin:10px 0 0;padding:0 0 0 18px;font-size:12.5px;line-height:1.55;color:var(--ink-dim)}
+.result .issues li{margin:2px 0}
+.field.wide{flex:1 1 100%}
+.field textarea{width:100%;min-height:88px;background:var(--panel-2);color:var(--ink);border:1px solid var(--line-bright);border-radius:9px;padding:9px 11px;font:inherit;font-size:13px;resize:vertical;box-sizing:border-box}
+.log.err{color:#fca5a5}
+@media (max-width:560px){
+  .ethics-bar .wrap{flex-direction:column;align-items:stretch;gap:8px}
+  .caution{font-size:13px}
+}
