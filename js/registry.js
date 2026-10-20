@@ -23,7 +23,12 @@ window.PaperLab.registry = [
   { g: 'Convert' },
   { id: 'img2pdf',  ico: '▤', t: 'Images → PDF', d: 'Build a PDF from JPEG / PNG / WebP images.' },
   { id: 'pdf2img',  ico: '▥', t: 'PDF → Images', d: 'Export each page as a PNG or JPEG.' },
+  { id: 'scan',    ico: '◫', t: 'Scan to PDF', d: 'Use your camera or photos: finds the page edges, straightens it, cleans it up like a scanner. Optional OCR.' },
+  { id: 'office',   ico: '▦', t: 'PDF → Word, Excel, PPT', d: 'Editable .docx, .xlsx and .pptx with columns, headings, tables and pictures. Optional OCR for scans.' },
   { id: 'books',    ico: '❡', t: 'E-books & comics', d: 'EPUB ⇄ PDF and CBZ ⇄ PDF. Keeps text selectable, adds bookmarks. DRM-free files only.' },
+
+  { g: 'Security' },
+  { id: 'secure',    ico: '🔒︎', t: 'Protect & unlock', d: 'Add a password (AES-256) with print / copy / edit limits — or remove a password you know. Never cracks passwords.' },
 
   { g: 'Mark & inspect' },
   { id: 'watermark', ico: '※', t: 'Watermark',     d: 'Visible text across every page, or an invisible per-recipient tracking mark — plus a checker to read it back.' },

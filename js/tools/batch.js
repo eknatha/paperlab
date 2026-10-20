@@ -2,7 +2,7 @@
    Engine: js/batch/engine.js · Sinks: js/batch/sink.js · Operations: js/ops.js + js/ocr/searchable.js */
 (function (PL) {
   const B = PL.batch;
-  const GROUPS = ['Optimize', 'Pages', 'Mark', 'Read', 'Fix', 'Books & comics'];
+  const GROUPS = ['Optimize', 'Pages', 'Mark', 'Read', 'Fix', 'Security', 'Books & comics', 'Office'];
 
   PL.register('batch', function (root) {
     root.classList.add('batch');

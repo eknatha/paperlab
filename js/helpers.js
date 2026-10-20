@@ -47,9 +47,9 @@ window.PaperLab = window.PaperLab || { tools: {} };
 
   PL.friendlyError = function (e) {
     const m = (e && (e.message || e.name || String(e))) || 'Unknown error';
-    if (/\b(EPUB|CBZ|ZIP archive|DRM)\b/.test(m)) return m;                    // e-book / comic messages are already user-facing
+    if (/\b(EPUB|CBZ|ZIP archive|DRM)\b/.test(m) || /^(Wrong password|Enter a password|Password is too long|The two passwords do not match|This PDF (needs a password|is already password)|Could not (unlock|protect))/.test(m)) return m;                    // e-book / comic messages are already user-facing
     if (e && e.name === 'AbortError') return 'Cancelled';
-    if (e && e.name === 'PasswordException' || /encrypt|password/i.test(m)) return 'Password-protected PDF — remove the password first';
+    if (e && e.name === 'PasswordException' || /encrypt|password/i.test(m)) return 'Password-protected PDF — open the Unlock tool first (you need the password)';
     if (/Failed to parse|No PDF header|Invalid PDF|InvalidPDF|bad XRef|Missing PDF|not a valid/i.test(m)) return 'Not a valid PDF (damaged or wrong file type)';
     if (/allocation|memory|out of/i.test(m)) return 'Out of memory — try fewer parallel files or a smaller file';
     return m.length > 140 ? m.slice(0, 140) + '…' : m;
@@ -125,7 +125,8 @@ window.PaperLab = window.PaperLab || { tools: {} };
       } else if (f.type === 'check') {
         inp = PL.el('input'); inp.type = 'checkbox'; inp.checked = !!f.value; get[f.id] = () => inp.checked;
       } else {
-        inp = PL.el('input'); inp.type = f.type === 'number' ? 'number' : 'text'; inp.value = f.value;
+        inp = PL.el('input'); inp.type = f.type === 'number' ? 'number' : f.type === 'password' ? 'password' : 'text'; inp.value = f.value;
+        if (f.type === 'password') { inp.autocomplete = 'new-password'; inp.spellcheck = false; inp.setAttribute('autocapitalize', 'off'); }
         if (f.type === 'number') inp.inputMode = 'decimal';
         if (f.min != null) inp.min = f.min; get[f.id] = () => inp.value;
       }
