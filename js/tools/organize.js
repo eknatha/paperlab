@@ -1,4 +1,4 @@
-/* PaperLab tool: Organize (reorder / delete / duplicate / rotate per page) */
+/* Patram tool: Organize (reorder / delete / duplicate / rotate per page) */
 (function (PL) {
   PL.register('organize', function (root) {
     const { PDFDocument, degrees } = PL.lib();
@@ -64,7 +64,7 @@
           doc.addPage(p);
         });
         const bytes = await doc.save();
-        out.appendChild(PL.download(bytes, 'paperlab-organized.pdf'));
+        out.appendChild(PL.download(bytes, 'patram-organized.pdf'));
         log.set('Done — ' + doc.getPageCount() + ' pages.', 'ok');
       } catch (e) { log.set('Failed: ' + e.message, 'err'); }
     };

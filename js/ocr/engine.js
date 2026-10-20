@@ -1,4 +1,4 @@
-/* PaperLab — OCR engine (Tesseract.js, fully local).
+/* Patram — OCR engine (Tesseract.js, fully local).
    All assets live in vendor/tesseract/ — nothing is fetched from a CDN.
    One shared scheduler (a pool of Tesseract workers) serves every page of every file in flight,
    so Mass Batch gets page-level parallelism for free. */

@@ -1,4 +1,4 @@
-/* PaperLab tool: Rotate (all pages) */
+/* Patram tool: Rotate (all pages) */
 (function (PL) {
   PL.register('rotate', function (root) {
     let file = null;
@@ -14,7 +14,7 @@
       out.innerHTML = ''; log.set('Rotating…');
       try {
         const r = await PL.ops.rotate.run(await PL.readArrayBuffer(file), { deg: root.querySelector('#deg').value, lenient: true });
-        out.appendChild(PL.download(r.bytes, 'paperlab-rotated.pdf'));
+        out.appendChild(PL.download(r.bytes, 'patram-rotated.pdf'));
         log.set('Done.', 'ok');
       } catch (e) { log.set('Failed: ' + PL.friendlyError(e), 'err'); }
     };

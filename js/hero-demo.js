@@ -1,4 +1,4 @@
-/* PaperLab — hero demo: live before/after on a mock PDF page.
+/* Patram — hero demo: live before/after on a mock PDF page.
    Left = raw document, right = "processed" (watermark + page number stamped).
    Drawn procedurally on canvas — same before/after concept as ImageLab. */
 (function (PL) {
@@ -57,7 +57,7 @@
       g.font = '700 46px ui-monospace, monospace';
       g.fillStyle = 'rgba(20,184,166,.22)';
       g.textAlign = 'center';
-      g.fillText('PAPERLAB', 0, 0);
+      g.fillText('PATRAM', 0, 0);
       g.restore();
       // page number
       g.fillStyle = '#14b8a6';

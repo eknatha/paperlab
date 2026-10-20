@@ -1,4 +1,4 @@
-/* PaperLab — Mass Batch engine.
+/* Patram — Mass Batch engine.
    Runs ONE operation over many files with:
      • bounded parallelism + an in-flight-bytes budget (RAM is the real limit, not file count)
      • per-file failure isolation (a corrupt / encrypted PDF never stops the run)

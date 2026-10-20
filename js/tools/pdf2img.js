@@ -1,4 +1,4 @@
-/* PaperLab tool: PDF → Images */
+/* Patram tool: PDF → Images */
 (function (PL) {
   PL.register('pdf2img', function (root) {
     let file = null;
@@ -25,7 +25,7 @@
           const cv = PL.el('canvas'); cv.width = vp.width; cv.height = vp.height;
           await page.render({ canvasContext: cv.getContext('2d'), viewport: vp }).promise;
           const blob = await new Promise(r => cv.toBlob(r, fmt, .92));
-          out.appendChild(PL.download(blob, `paperlab-page-${i}.${ext}`, fmt));
+          out.appendChild(PL.download(blob, `patram-page-${i}.${ext}`, fmt));
         }
         log.set('Done — ' + pdf.numPages + ' image' + (pdf.numPages > 1 ? 's' : '') + '.', 'ok');
       } catch (e) { log.set('Failed: ' + e.message, 'err'); }

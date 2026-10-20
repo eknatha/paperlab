@@ -1,4 +1,4 @@
-/* PaperLab tool: Merge */
+/* Patram tool: Merge */
 (function (PL) {
   PL.register('merge', function (root) {
     const { PDFDocument } = PL.lib();
@@ -36,7 +36,7 @@
           pages.forEach(p => merged.addPage(p));
         }
         const bytes = await merged.save();
-        out.appendChild(PL.download(bytes, 'paperlab-merged.pdf'));
+        out.appendChild(PL.download(bytes, 'patram-merged.pdf'));
         log.set('Done — ' + merged.getPageCount() + ' pages.', 'ok');
       } catch (e) { log.set('Failed: ' + e.message, 'err'); }
       go.disabled = false;

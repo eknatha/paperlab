@@ -1,11 +1,11 @@
-/* PaperLab — visitor counter.
+/* Patram — visitor counter.
    Total: a free, keyless, CORS-enabled counting service (tries the providers below in order).
    Today: localStorage (once per calendar day per browser).
    History: the original counterapi.dev v1 API was switched off on 7 Aug 2026 (that is why the number stopped moving).
    Set BASELINE to the last total you saw before then, so the new counter continues from it. */
 (function () {
   const BASELINE = 0;                       // ← add your old total here (e.g. 4210); it is added to every provider's count
-  const NS = 'paperlab.eknathalabs.com', KEY = 'visits';
+  const NS = 'patram.eknathalabs.com', KEY = 'visits';
   const PROVIDERS = [
     { name: 'abacus',
       hit: 'https://abacus.jasoncameron.dev/hit/' + NS + '/' + KEY,

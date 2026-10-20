@@ -1,4 +1,4 @@
-/* PaperLab tool: Repair a damaged PDF.  Engine: js/repair/engine.js (shared with Mass Batch). */
+/* Patram tool: Repair a damaged PDF.  Engine: js/repair/engine.js (shared with Mass Batch). */
 (function (PL) {
   PL.register('repair', function (root) {
     let file = null, running = false, ac = null;
@@ -9,7 +9,7 @@
     const opts = PL.el('div', 'ctl');
     opts.innerHTML = '<div class="field check"><input type="checkbox" id="r_img" checked><label for="r_img">If some pages cannot be read, redraw them as images (text becomes non-selectable)</label></div>';
     root.appendChild(opts);
-    root.appendChild(PL.el('div', 'note', 'Fixes files that will not open, show “damaged / cannot be repaired”, were cut off mid-download, or have a broken index. PaperLab rebuilds the internal structure and keeps every page it can still read. Bytes that are physically missing cannot be invented. Password-protected files are not touched. Many files? Use <b>Mass Batch → Repair damaged PDF</b>.'));
+    root.appendChild(PL.el('div', 'note', 'Fixes files that will not open, show “damaged / cannot be repaired”, were cut off mid-download, or have a broken index. Patram rebuilds the internal structure and keeps every page it can still read. Bytes that are physically missing cannot be invented. Password-protected files are not touched. Many files? Use <b>Mass Batch → Repair damaged PDF</b>.'));
 
     const actions = PL.el('div', 'actions');
     const go = PL.el('button', 'btn', 'Repair'); go.disabled = true;

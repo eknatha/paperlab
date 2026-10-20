@@ -1,4 +1,4 @@
-/* PaperLab tool: Compare PDFs — word-level text diff + visual (pixel) diff, fully local.
+/* Patram tool: Compare PDFs — word-level text diff + visual (pixel) diff, fully local.
    Algorithms: js/compare/diff.js */
 (function (PL) {
   const X = () => PL.cmp;
@@ -297,10 +297,10 @@
       try {
         const MAXIMG = PL.env.mobile ? 15 : 40;
         const changed = S.pages.map((p, i) => ({ p, i })).filter(x => x.p.status !== 'same' && x.p.status !== 'pending');
-        let h = '<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PaperLab comparison</title>' +
+        let h = '<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Patram comparison</title>' +
           '<style>body{font:15px/1.5 system-ui,sans-serif;max-width:900px;margin:24px auto;padding:0 16px;color:#111}h1{font-size:22px}h2{font-size:17px;margin-top:28px}' +
           'ins{background:#d1fae5;color:#065f46;text-decoration:none;padding:0 2px}del{background:#fee2e2;color:#991b1b;padding:0 2px}li{margin:6px 0}img{max-width:100%;border:1px solid #ccc}.m{color:#666;font-size:13px}</style>';
-        h += '<h1>PaperLab — PDF comparison</h1><p class="m">A: ' + esc(S.A.name) + ' (' + S.A.pdf.numPages + ' pages)<br>B: ' + esc(S.B.name) + ' (' + S.B.pdf.numPages + ' pages)<br>' +
+        h += '<h1>Patram — PDF comparison</h1><p class="m">A: ' + esc(S.A.name) + ' (' + S.A.pdf.numPages + ' pages)<br>B: ' + esc(S.B.name) + ' (' + S.B.pdf.numPages + ' pages)<br>' +
           'Words removed: ' + S.diff.removed + ' · added: ' + S.diff.added + ' · pages with changes: ' + changed.length + ' of ' + S.nPages + '</p>';
         h += '<h2>Text changes</h2><ol>';
         const { ta, tb } = S.text;
@@ -326,7 +326,7 @@
           }
         }
         h += '</html>';
-        const a = PL.download(new Blob([h], { type: 'text/html' }), 'paperlab-comparison.html', 'text/html');
+        const a = PL.download(new Blob([h], { type: 'text/html' }), 'patram-comparison.html', 'text/html');
         repOut.innerHTML = ''; repOut.appendChild(a);
         if (!PL.env.mobile) a.click();
         log.set('Report ready — open it in a browser and print to save as PDF.', 'ok');

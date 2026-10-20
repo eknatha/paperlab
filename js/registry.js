@@ -1,4 +1,4 @@
-/* PaperLab — tool registry (metadata only; builders in js/tools/*.js)
+/* Patram — tool registry (metadata only; builders in js/tools/*.js)
    primary:true → oversized primary cards; g:'...' → secondary group; soon:true → disabled */
 window.PaperLab = window.PaperLab || { tools: {} };
 

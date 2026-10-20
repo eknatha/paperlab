@@ -1,4 +1,4 @@
-/* PaperLab — Compare PDFs: text + pixel diff algorithms (no DOM except canvas helpers).
+/* Patram — Compare PDFs: text + pixel diff algorithms (no DOM except canvas helpers).
    Text   : words are extracted with pdf.js, then diffed with Myers' O(ND) algorithm (shared prefix/suffix trimmed first).
    Pixels : shift-tolerant luminance diff — a pixel only counts as changed when nothing similar exists within 1 px in the
             other page, so anti-aliasing / sub-pixel shifts never light up. */

@@ -1,4 +1,4 @@
-/* PaperLab tool: Mass Batch — one operation over hundreds of files, offline.
+/* Patram tool: Mass Batch — one operation over hundreds of files, offline.
    Engine: js/batch/engine.js · Sinks: js/batch/sink.js · Operations: js/ops.js + js/ocr/searchable.js */
 (function (PL) {
   const B = PL.batch;
@@ -113,7 +113,7 @@
     [['0', 'Auto (' + (PL.env.mobile ? 80 : 400) + ' MB)'], ['50', '50 MB'], ['100', '100 MB'], ['250', '250 MB'], ['500', '500 MB'], ['1000', '1 GB']].forEach(([v, l]) => { const o = PL.el('option'); o.value = v; o.textContent = l; partSel.appendChild(o); });
     const repBox = PL.el('input'); repBox.type = 'checkbox'; repBox.checked = true; repBox.id = 'b_rep';
     const mk = (label, el, cls) => { const d = PL.el('div', 'field' + (cls ? ' ' + cls : '')); const l = PL.el('label'); l.textContent = label; l.htmlFor = el.id; if (cls === 'check') d.append(el, l); else d.append(l, el); return d; };
-    advBody.append(mk('Files in parallel', conc), mk('Save results as', outSel), mk('Split ZIP every', partSel), mk('Include paperlab-report.csv', repBox, 'check'));
+    advBody.append(mk('Files in parallel', conc), mk('Save results as', outSel), mk('Split ZIP every', partSel), mk('Include patram-report.csv', repBox, 'check'));
     adv.appendChild(advBody); root.appendChild(adv);
     outSel.onchange = () => { partSel.parentNode.style.display = outSel.value === 'zip' ? '' : 'none'; };
 
@@ -193,7 +193,7 @@
         sink = new B.DirSink(lastDir);
       } else {
         const mb = +partSel.value;
-        sink = new B.ZipSink({ partLimit: mb ? mb * 1048576 : undefined, prefix: 'paperlab-batch' + (runNo ? '-run' + (runNo + 1) : '') });
+        sink = new B.ZipSink({ partLimit: mb ? mb * 1048576 : undefined, prefix: 'patram-batch' + (runNo ? '-run' + (runNo + 1) : '') });
       }
       runNo++;
       const opts = { ...F.values() };
@@ -212,7 +212,7 @@
       const st = await ctl.done;
       let links = [], msg = '';
       try {
-        if (repBox.checked && sink.count) await sink.add('paperlab-report.csv', new TextEncoder().encode(B.reportCsv(items.filter(i => i.state !== 'skipped'))));
+        if (repBox.checked && sink.count) await sink.add('patram-report.csv', new TextEncoder().encode(B.reportCsv(items.filter(i => i.state !== 'skipped'))));
         const parts = await sink.finish();
         if (useDir) msg = 'Saved ' + sink.count + ' file' + (sink.count === 1 ? '' : 's') + ' to the folder you chose.';
         else {
@@ -223,7 +223,7 @@
       const failed = items.filter(i => i.state === 'failed');
       if (failed.length) {
         const csv = new Blob(['source,error\r\n' + failed.map(i => '"' + i.path.replace(/"/g, '""') + '","' + i.error.replace(/"/g, '""') + '"').join('\r\n')], { type: 'text/csv' });
-        const a = PL.download(csv, 'paperlab-failed.csv', 'text/csv'); links.push(a);
+        const a = PL.download(csv, 'patram-failed.csv', 'text/csv'); links.push(a);
         retry.style.display = '';
       }
       showResults(links, (st.cancelled ? 'Stopped — ' + st.cancelled + ' file(s) not processed (press Start to continue). ' : '') + msg);

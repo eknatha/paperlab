@@ -1,4 +1,4 @@
-/* PaperLab tool: Scan to PDF (camera or photos). Engine: js/scan/engine.js — everything stays on this device. */
+/* Patram tool: Scan to PDF (camera or photos). Engine: js/scan/engine.js — everything stays on this device. */
 (function (PL) {
   PL.register('scan', function (root) {
     const S = PL.scan; let pages = [], sel = -1, stream = null, running = false, ac = null, drag = -1;
@@ -9,7 +9,7 @@
     const bPick = PL.el('button', 'btn ghost', 'Take / choose photos'); bPick.type = 'button';
     const inp = PL.el('input'); inp.type = 'file'; inp.accept = 'image/*'; inp.multiple = true; inp.style.display = 'none'; inp.id = 'scan_file';
     bar.append(bCam, bPick, inp); root.appendChild(bar);
-    const hint = PL.el('div', 'note', 'Lay the page flat on a dark surface in good light. PaperLab finds the edges, straightens the page and cleans it up like a scanner. Photos never leave your device.');
+    const hint = PL.el('div', 'note', 'Lay the page flat on a dark surface in good light. Patram finds the edges, straightens the page and cleans it up like a scanner. Photos never leave your device.');
     root.appendChild(hint);
 
     /* ── live camera ── */

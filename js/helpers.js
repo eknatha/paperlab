@@ -1,4 +1,4 @@
-/* PaperLab — shared helpers + global namespace
+/* Patram — shared helpers + global namespace
    Every tool file registers into PaperLab.tools[id] = builderFn(rootEl). */
 window.PaperLab = window.PaperLab || { tools: {} };
 

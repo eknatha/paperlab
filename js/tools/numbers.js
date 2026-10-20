@@ -1,4 +1,4 @@
-/* PaperLab tool: Page numbers / Bates */
+/* Patram tool: Page numbers / Bates */
 (function (PL) {
   PL.register('numbers', function (root) {
     let file = null;
@@ -20,7 +20,7 @@
           fmt: root.querySelector('#fmt').value, pos: root.querySelector('#pos').value,
           start: root.querySelector('#start').value, pre: root.querySelector('#pre').value, lenient: true
         });
-        out.appendChild(PL.download(r.bytes, 'paperlab-numbered.pdf'));
+        out.appendChild(PL.download(r.bytes, 'patram-numbered.pdf'));
         log.set('Done — ' + r.note + '.', 'ok');
       } catch (e) { log.set('Failed: ' + PL.friendlyError(e), 'err'); }
     };

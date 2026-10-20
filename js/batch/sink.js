@@ -1,4 +1,4 @@
-/* PaperLab — Mass Batch output sinks.
+/* Patram — Mass Batch output sinks.
    ZipSink : streams results into ZIP parts (fflate), split by size so no single archive exhausts memory.
              Works in every browser, including phones.
    DirSink : writes each result straight into a user-chosen folder (File System Access API —
@@ -29,7 +29,7 @@ window.PaperLab = window.PaperLab || { tools: {} };
       opts = opts || {};
       this.kind = 'zip';
       this.limit = opts.partLimit || (PL.env.mobile ? 80 : 400) * 1048576;
-      this.prefix = opts.prefix || 'paperlab-batch';
+      this.prefix = opts.prefix || 'patram-batch';
       this.parts = []; this.zip = null; this.err = null;
     }
     _open() {

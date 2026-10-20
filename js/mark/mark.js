@@ -1,7 +1,7 @@
-/* PaperLab — invisible document marks (for tracing YOUR OWN documents to the person you sent them to).
+/* Patram — invisible document marks (for tracing YOUR OWN documents to the person you sent them to).
 
    A mark is written on two channels so one survives when the other is stripped:
-     1. a custom document-information entry   /PaperLabMark  (survives copy, rename, most re-saves)
+     1. a custom document-information entry   /PatramMark (older files: /PaperLabMark — still read)  (survives copy, rename, most re-saves)
      2. hidden zero-opacity text on every page  "PLMARK1:<tag>:<check>"  (survives metadata stripping; also travels with
         copy-pasted text)
    Honest limits: printing, screenshotting, "print to PDF" or rasterising a page removes the mark. It is a deterrent and a
@@ -25,7 +25,7 @@ window.PaperLab = window.PaperLab || { tools: {} };
   /* write both channels into a pdf-lib document (needs an embedded font for the hidden text) */
   M.apply = function (doc, font, tag) {
     const L = PL.lib(), token = M.token(tag);
-    doc.getInfoDict().set(L.PDFName.of('PaperLabMark'), L.PDFHexString.fromText(tag));
+    doc.getInfoDict().set(L.PDFName.of('PatramMark'), L.PDFHexString.fromText(tag));
     doc.getPages().forEach(p => {
       const { width: w, height: h } = p.getSize();
       p.drawText(token, { x: 2, y: 2, size: 2, font, opacity: 0 });
@@ -42,7 +42,7 @@ window.PaperLab = window.PaperLab || { tools: {} };
       try {
         const md = await pdf.getMetadata();
         const c = md && md.info && md.info.Custom;
-        if (c && c.PaperLabMark) info = String(c.PaperLabMark);
+        if (c && (c.PatramMark || c.PaperLabMark)) info = String(c.PatramMark || c.PaperLabMark);   // PaperLabMark = files marked before the rename
       } catch (e) { /* no metadata */ }
       const found = new Map(); let marked = 0, bad = 0;
       const re = /PLMARK1:([A-Za-z0-9%._~-]+):([0-9a-f]{4})/g;

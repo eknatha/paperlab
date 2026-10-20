@@ -1,4 +1,4 @@
-/* PaperLab tool: Extract text */
+/* Patram tool: Extract text */
 (function (PL) {
   PL.register('extract', function (root) {
     let file = null;
@@ -27,6 +27,6 @@
       } catch (e) { log.set('Failed: ' + e.message, 'err'); }
     };
     copy.onclick = () => { ta.select(); document.execCommand('copy'); log.set('Copied.', 'ok'); };
-    dl.onclick = () => { out.innerHTML = ''; out.appendChild(PL.download(new Blob([ta.value], { type: 'text/plain' }), 'paperlab-text.txt', 'text/plain')); };
+    dl.onclick = () => { out.innerHTML = ''; out.appendChild(PL.download(new Blob([ta.value], { type: 'text/plain' }), 'patram-text.txt', 'text/plain')); };
   });
 })(window.PaperLab);

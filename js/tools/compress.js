@@ -1,4 +1,4 @@
-/* PaperLab tool: Compress to a target size — 100 KB / 200 KB / 300 KB / 1 MB / custom / manual.
+/* Patram tool: Compress to a target size — 100 KB / 200 KB / 300 KB / 1 MB / custom / manual.
    Engine: js/compress/engine.js (shared with Mass Batch). */
 (function (PL) {
   PL.register('compress', function (root) {
@@ -33,7 +33,7 @@
     root.appendChild(opts);
     const $ = id => root.querySelector('#' + id);
 
-    root.appendChild(PL.el('div', 'note', 'PaperLab finds the best quality that fits your size. Images are re-encoded first, so text stays selectable; flattening pages happens only if that is not enough and you allow it. Have many files? Use <b>Mass Batch</b> with the same options.'));
+    root.appendChild(PL.el('div', 'note', 'Patram finds the best quality that fits your size. Images are re-encoded first, so text stays selectable; flattening pages happens only if that is not enough and you allow it. Have many files? Use <b>Mass Batch</b> with the same options.'));
 
     const actions = PL.el('div', 'actions');
     const go = PL.el('button', 'btn', 'Compress'); go.disabled = true;

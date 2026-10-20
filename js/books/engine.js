@@ -1,4 +1,4 @@
-/* PaperLab — e-books & comics: CBZ ⇄ PDF and EPUB ⇄ PDF, 100% in the browser.
+/* Patram — e-books & comics: CBZ ⇄ PDF and EPUB ⇄ PDF, 100% in the browser.
 
      cbz2pdf   comic archive → PDF         (JPEGs are embedded untouched; other formats are converted)
      pdf2cbz   PDF → comic archive         (pages rendered to JPEG/PNG + ComicInfo.xml)
@@ -6,7 +6,7 @@
                                             Latin via Noto Serif, Indian scripts via the bundled Noto fonts)
      pdf2epub  PDF → EPUB 3                (reflowable text, or fixed-layout page images; cover + navigation)
 
-   Not supported on purpose: DRM-protected e-books (PaperLab never removes DRM), CBR/RAR archives. */
+   Not supported on purpose: DRM-protected e-books (Patram never removes DRM), CBR/RAR archives. */
 window.PaperLab = window.PaperLab || { tools: {} };
 
 (function (PL) {
@@ -172,7 +172,7 @@ window.PaperLab = window.PaperLab || { tools: {} };
     if (enc) {
       const algs = (enc.match(/Algorithm="([^"]+)"/g) || []).map(a => a.slice(11, -1));
       if (algs.some(a => !/idpf\.org\/2008\/embedding|ns\.adobe\.com\/pdf\/enc#RC/.test(a)) || /EncryptedData[^>]*>[\s\S]*?<\/?[^>]*(content|\.x?html?)/i.test(enc) && algs.some(a => !/embedding/.test(a))) {
-        throw new Error('This EPUB is DRM-protected. PaperLab does not remove DRM — use a copy you are licensed to convert.');
+        throw new Error('This EPUB is DRM-protected. Patram does not remove DRM — use a copy you are licensed to convert.');
       }
     }
     const cont = text('META-INF/container.xml');
@@ -307,7 +307,7 @@ window.PaperLab = window.PaperLab || { tools: {} };
     }
     latin(style) {
       const name = { r: 'Regular', b: 'Bold', i: 'Italic', bi: 'BoldItalic' }[style] || 'Regular';
-      return this.get('serif-' + name, () => fetch('vendor/fonts/NotoSerif-' + name + '.woff?v=20261020a').then(r => { if (!r.ok) throw new Error('Font file missing: NotoSerif-' + name); return r.arrayBuffer(); }).then(b => new Uint8Array(b)));
+      return this.get('serif-' + name, () => fetch('vendor/fonts/NotoSerif-' + name + '.woff?v=20261020b').then(r => { if (!r.ok) throw new Error('Font file missing: NotoSerif-' + name); return r.arrayBuffer(); }).then(b => new Uint8Array(b)));
     }
     script(sc) { return this.get('script-' + sc, () => PL.ocr._loadFontBytes(sc)); }
     /* fontkit's shaper is right for drawing but can crash on some Noto subsets: fall back to 1:1 glyph mapping */

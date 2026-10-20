@@ -1,12 +1,12 @@
-/* PaperLab — password protect / unlock PDFs (QPDF compiled to WebAssembly, runs entirely in the browser).
+/* Patram — password protect / unlock PDFs (QPDF compiled to WebAssembly, runs entirely in the browser).
    Protect: AES-256 (or AES-128) encryption with an open-password and optional restrictions.
-   Unlock : removes the password from a file — ONLY when you supply the correct password. PaperLab never guesses, cracks or
+   Unlock : removes the password from a file — ONLY when you supply the correct password. Patram never guesses, cracks or
             brute-forces passwords. */
 window.PaperLab = window.PaperLab || { tools: {} };
 
 (function (PL) {
   const S = PL.secure = {};
-  const V = '?v=20261020a';
+  const V = '?v=20261020b';
   let factory = null, wasm = null;
 
   async function boot() {
@@ -36,7 +36,7 @@ window.PaperLab = window.PaperLab || { tools: {} };
     return { code, out, err, output };
   }
 
-  /* qpdf fails on some damaged files; PaperLab's repair engine usually reads them — repair, then retry once */
+  /* qpdf fails on some damaged files; Patram's repair engine usually reads them — repair, then retry once */
   async function qpdfOrRepair(args, bytes, ctx) {
     let r = await qpdf(args, bytes);
     if (r.output && r.output.length) return { r, repaired: false };

@@ -1,4 +1,4 @@
-/* PaperLab — camera / photo document scanner engine (all on <canvas>, nothing leaves the device).
+/* Patram — camera / photo document scanner engine (all on <canvas>, nothing leaves the device).
    detect(): finds the paper in a photo · warp(): perspective-corrects it · filter(): scan-style clean-up · toPdf(): pages → PDF. */
 window.PaperLab = window.PaperLab || { tools: {} };
 
@@ -153,7 +153,7 @@ window.PaperLab = window.PaperLab || { tools: {} };
       PL.freeCanvas(c);
       if (i % 3 === 2) await PL.tick();
     }
-    doc.setCreator('PaperLab'); doc.setProducer('PaperLab');
+    doc.setCreator('Patram'); doc.setProducer('Patram');
     return await doc.save();
   };
 })(window.PaperLab);

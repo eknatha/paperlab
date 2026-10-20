@@ -1,4 +1,4 @@
-/* PaperLab tool: Metadata view / edit / strip */
+/* Patram tool: Metadata view / edit / strip */
 (function (PL) {
   PL.register('meta', function (root) {
     const { PDFDocument } = PL.lib();
@@ -29,7 +29,7 @@
       try {
         if (stripAll) {
           const r = await PL.ops.strip.run(await PL.readArrayBuffer(file), { lenient: true });
-          out.appendChild(PL.download(r.bytes, 'paperlab-metadata.pdf'));
+          out.appendChild(PL.download(r.bytes, 'patram-metadata.pdf'));
           log.set('Metadata stripped (info dict, XMP, dates).', 'ok');
           return;
         } else {
@@ -40,7 +40,7 @@
           doc.setKeywords(kw ? kw.split(',').map(s => s.trim()) : []);
         }
         const bytes = await doc.save();
-        out.appendChild(PL.download(bytes, 'paperlab-metadata.pdf'));
+        out.appendChild(PL.download(bytes, 'patram-metadata.pdf'));
         log.set(stripAll ? 'Metadata stripped.' : 'Metadata updated.', 'ok');
       } catch (e) { log.set('Failed: ' + e.message, 'err'); }
     }

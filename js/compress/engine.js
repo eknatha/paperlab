@@ -1,4 +1,4 @@
-/* PaperLab — Compress to a target size (100 KB / 200 KB / 300 KB / 1 MB / custom) — fully local.
+/* Patram — Compress to a target size (100 KB / 200 KB / 300 KB / 1 MB / custom) — fully local.
 
    Strategy, gentlest first, stopping as soon as the file fits:
      1. Already small enough            → return the original untouched.
@@ -352,7 +352,7 @@ window.PaperLab = window.PaperLab || { tools: {} };
       { id: 'gray', label: 'If needed, convert to grayscale', type: 'check', value: true, showNotIf: ['mode', 'manual'] },
       { id: 'keep', label: 'Keep original if result is not smaller', type: 'check', value: true }
     ],
-    note: 'Pick a size and PaperLab finds the best quality that fits. Images are re-encoded first so text stays selectable; flattening pages is only a last resort. Run Searchable (OCR) afterwards if you need text back.',
+    note: 'Pick a size and Patram finds the best quality that fits. Images are re-encoded first so text stays selectable; flattening pages is only a last resort. Run Searchable (OCR) afterwards if you need text back.',
     async run(bytes, o, ctx) {
       o = o || {};
       const target = C.targetBytes(o);

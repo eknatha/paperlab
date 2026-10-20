@@ -1,4 +1,4 @@
-/* PaperLab tool: PDF → Word / Excel / PowerPoint.  Engine: js/convert/*.js (shared with Mass Batch). */
+/* Patram tool: PDF → Word / Excel / PowerPoint.  Engine: js/convert/*.js (shared with Mass Batch). */
 (function (PL) {
   PL.register('office', function (root) {
     const DIRS = [['pdf2docx', 'Word (.docx)'], ['pdf2xlsx', 'Excel (.xlsx)'], ['pdf2pptx', 'PowerPoint (.pptx)']];

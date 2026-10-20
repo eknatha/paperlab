@@ -1,4 +1,4 @@
-/* PaperLab tool: Searchable — OCR scanned PDFs / images into searchable PDFs (Tesseract.js, local) */
+/* Patram tool: Searchable — OCR scanned PDFs / images into searchable PDFs (Tesseract.js, local) */
 (function (PL) {
   PL.register('searchable', function (root) {
     const op = PL.ops.searchable;

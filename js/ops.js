@@ -1,4 +1,4 @@
-/* PaperLab — shared PDF operations.
+/* Patram — shared PDF operations.
    Single-file tools AND Mass Batch both call these, so behaviour never drifts.
 
    op = {

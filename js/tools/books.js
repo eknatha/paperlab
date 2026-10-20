@@ -1,4 +1,4 @@
-/* PaperLab tool: E-books & comics — EPUB ⇄ PDF and CBZ ⇄ PDF.  Engine: js/books/engine.js (shared with Mass Batch). */
+/* Patram tool: E-books & comics — EPUB ⇄ PDF and CBZ ⇄ PDF.  Engine: js/books/engine.js (shared with Mass Batch). */
 (function (PL) {
   PL.register('books', function (root) {
     const DIRS = [
@@ -32,7 +32,7 @@
     const setBar = f => { bar.style.display = 'block'; bar.firstChild.style.width = Math.round(Math.max(0, Math.min(1, f)) * 100) + '%'; };
 
     const NOTES = {
-      epub2pdf: 'Typesets the book into a PDF with selectable text, headings, lists, images and bookmarks. Latin text and the major Indian scripts are supported; right-to-left languages (Urdu, Arabic) are not laid out correctly yet. <b>DRM-protected books are refused</b> — PaperLab never removes DRM. Convert only books you own or are licensed to use.',
+      epub2pdf: 'Typesets the book into a PDF with selectable text, headings, lists, images and bookmarks. Latin text and the major Indian scripts are supported; right-to-left languages (Urdu, Arabic) are not laid out correctly yet. <b>DRM-protected books are refused</b> — Patram never removes DRM. Convert only books you own or are licensed to use.',
       cbz2pdf: 'Packs the pages of a comic archive (CBZ, or any ZIP of images) into a PDF in natural page order. JPEGs are embedded untouched, so there is no quality loss. CBR (RAR) archives are not supported.',
       pdf2epub: 'Reflowable mode re-flows the text so it reads well on a phone; page-image mode keeps the exact look. PDFs without a text layer automatically use page images (run <b>Searchable</b> first if you want reflowable text).',
       pdf2cbz: 'Renders each page as an image and zips them in order, with a ComicInfo.xml, for comic readers.'

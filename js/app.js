@@ -1,4 +1,4 @@
-/* PaperLab — app boot. Renders primary + secondary tools, opens tool builders. */
+/* Patram — app boot. Renders primary + secondary tools, opens tool builders. */
 (function (PL) {
   const primaryWrap = document.getElementById('primary');
   const grid = document.getElementById('grid');

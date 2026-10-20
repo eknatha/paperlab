@@ -1,4 +1,4 @@
-/* PaperLab tool: Password protect / Unlock.  Engine: js/secure/engine.js (QPDF → WebAssembly, shared with Mass Batch). */
+/* Patram tool: Password protect / Unlock.  Engine: js/secure/engine.js (QPDF → WebAssembly, shared with Mass Batch). */
 (function (PL) {
   PL.register('secure', function (root) {
     let file = null, tab = 'protect', running = false, ac = null;
@@ -27,9 +27,9 @@
 
     root.appendChild(boxP); root.appendChild(boxU);
     const noteP = PL.el('div', 'note');
-    noteP.innerHTML = '<b>If you forget the password, nobody can recover the file</b> — not you, not PaperLab. Passwords never leave your device and are not stored. Use 12+ characters. The restrictions (printing, copying, editing) are honoured by most viewers but are weaker than the open-password.';
+    noteP.innerHTML = '<b>If you forget the password, nobody can recover the file</b> — not you, not Patram. Passwords never leave your device and are not stored. Use 12+ characters. The restrictions (printing, copying, editing) are honoured by most viewers but are weaker than the open-password.';
     const noteU = PL.el('div', 'note');
-    noteU.innerHTML = 'Removes the password from a file <b>you are allowed to open</b>, using the password you supply. PaperLab cannot guess or crack passwords. A file with only editing/printing restrictions (no open-password) can be unlocked with the field left empty — do this only for files you own or have permission to change.';
+    noteU.innerHTML = 'Removes the password from a file <b>you are allowed to open</b>, using the password you supply. Patram cannot guess or crack passwords. A file with only editing/printing restrictions (no open-password) can be unlocked with the field left empty — do this only for files you own or have permission to change.';
     root.appendChild(noteP); root.appendChild(noteU);
 
     const actions = PL.el('div', 'actions');

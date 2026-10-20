@@ -1,4 +1,4 @@
-/* PaperLab — PDF layout analysis for the Word / Excel / PowerPoint converters.
+/* Patram — PDF layout analysis for the Word / Excel / PowerPoint converters.
    pdf.js text + image positions  →  a page model made of paragraphs, tables and pictures in reading order.
    Everything is heuristic: columns are found with an XY-cut, tables from aligned cells, headings from font size.
    It is a "best effort" conversion — complex layouts, vector drawings and unusual fonts can still need touching up. */

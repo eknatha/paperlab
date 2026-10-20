@@ -1,4 +1,4 @@
-/* PaperLab — responsible-use notices.
+/* Patram — responsible-use notices.
    Every tool opens with a short caution (always visible), the footer links to the full policy, and first-time visitors see a
    dismissible bar. Cautions are deliberately short; the policy page (responsible-use.html) has the detail. */
 window.PaperLab = window.PaperLab || { tools: {} };
@@ -9,10 +9,10 @@ window.PaperLab = window.PaperLab || { tools: {} };
     watermark: 'Invisible marks are for tracing <b>your own</b> documents to the person you sent them to. Tell recipients their copy is individually marked — do not use marks to track people without their knowledge.',
     meta: 'Stripping metadata is fine for your own privacy. Do not use it to hide where a document came from, or to disguise that it was altered.',
     repair: 'Repair recovers <b>your own</b> damaged files. It does not bypass passwords or permissions, and recovered content should be checked before you rely on it.',
-    secure: 'Protect your own files. Unlocking works <b>only with the password you supply</b> — PaperLab cannot and will not guess, crack or bypass passwords. Do not remove protection from documents you have no right to open or change.',
+    secure: 'Protect your own files. Unlocking works <b>only with the password you supply</b> — Patram cannot and will not guess, crack or bypass passwords. Do not remove protection from documents you have no right to open or change.',
     scan: 'Scan only documents you own or may copy. Photos stay on your device. Check the result is legible before you discard the original — especially for legal, tax or identity papers.',
     office: 'Converting does not give you rights to the content: copy, edit and share only documents you own or may reuse. Check the result against the original before relying on it — numbers, names and legal text especially.',
-    books: 'Convert only books and comics you own or are licensed to use. PaperLab <b>refuses DRM-protected files</b> and will never remove DRM. Respect authors’ copyright.',
+    books: 'Convert only books and comics you own or are licensed to use. Patram <b>refuses DRM-protected files</b> and will never remove DRM. Respect authors’ copyright.',
     searchable: 'Scans often contain personal data. Process only documents you are entitled to, and store the searchable output as carefully as the original.',
     compare: 'Compare only documents you are entitled to review. A difference report is a lead, not legal proof.',
     compress: 'Compression can reduce legibility. Check the result before submitting official or legal documents, and never change their content.',

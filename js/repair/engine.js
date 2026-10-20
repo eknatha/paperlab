@@ -1,4 +1,4 @@
-/* PaperLab — Repair a damaged PDF, 100% in the browser.
+/* Patram — Repair a damaged PDF, 100% in the browser.
 
    Ladder (stops at the first rung whose output passes verification):
      1. LIGHT    pdf-lib reads the file as-is and writes it back with a fresh cross-reference table.

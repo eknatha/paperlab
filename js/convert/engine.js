@@ -1,4 +1,4 @@
-/* PaperLab — PDF → Word / Excel / PowerPoint.  Runs entirely in the browser.
+/* Patram — PDF → Word / Excel / PowerPoint.  Runs entirely in the browser.
    Layout analysis: js/convert/layout.js   ·   file writers: js/convert/ooxml.js   ·   shared with Mass Batch via PL.ops. */
 window.PaperLab = window.PaperLab || { tools: {} };
 

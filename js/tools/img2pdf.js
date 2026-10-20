@@ -1,4 +1,4 @@
-/* PaperLab tool: Images → PDF */
+/* Patram tool: Images → PDF */
 (function (PL) {
   PL.register('img2pdf', function (root) {
     const { PDFDocument } = PL.lib();
@@ -52,7 +52,7 @@
           page.drawImage(img, { x: (pw - w) / 2, y: (ph - h) / 2, width: w, height: h });
         }
         const bytes = await doc.save();
-        out.appendChild(PL.download(bytes, 'paperlab-images.pdf'));
+        out.appendChild(PL.download(bytes, 'patram-images.pdf'));
         log.set('Done — ' + imgs.length + ' page' + (imgs.length > 1 ? 's' : '') + '.', 'ok');
       } catch (e) { log.set('Failed: ' + e.message, 'err'); }
     };

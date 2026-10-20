@@ -1,4 +1,4 @@
-/* PaperLab — "Searchable": scanned PDF / image → searchable PDF, 100% in-browser.
+/* Patram — "Searchable": scanned PDF / image → searchable PDF, 100% in-browser.
 
    Strategy: keep the original page content untouched and overlay an INVISIBLE text layer
    (text rendering mode 3) positioned word-by-word from Tesseract's bounding boxes.
@@ -21,7 +21,7 @@ window.PaperLab = window.PaperLab || { tools: {} };
   const fontBytes = {};
   async function loadFontBytes(script) {
     if (!fontBytes[script]) {
-      const url = 'vendor/fonts/' + FONT_FILES[script] + '-Regular.woff?v=20261020a';
+      const url = 'vendor/fonts/' + FONT_FILES[script] + '-Regular.woff?v=20261020b';
       fontBytes[script] = fetch(url).then(r => {
         if (!r.ok) throw new Error('Font file missing: ' + url);
         return r.arrayBuffer();

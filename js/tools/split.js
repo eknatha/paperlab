@@ -1,4 +1,4 @@
-/* PaperLab tool: Split */
+/* Patram tool: Split */
 (function (PL) {
   PL.register('split', function (root) {
     const { PDFDocument } = PL.lib();
@@ -41,7 +41,7 @@
           const idx = []; for (let i = a; i <= b; i++) idx.push(i);
           const pages = await doc.copyPages(src, idx); pages.forEach(p => doc.addPage(p));
           const bytes = await doc.save();
-          out.appendChild(PL.download(bytes, `paperlab-pages-${a + 1}${b > a ? '-' + (b + 1) : ''}.pdf`)); n++;
+          out.appendChild(PL.download(bytes, `patram-pages-${a + 1}${b > a ? '-' + (b + 1) : ''}.pdf`)); n++;
         }
         log.set('Done — ' + n + ' file' + (n > 1 ? 's' : '') + ' ready.', 'ok');
       } catch (e) { log.set('Failed: ' + e.message, 'err'); }

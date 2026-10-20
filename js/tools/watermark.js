@@ -1,4 +1,4 @@
-/* PaperLab tool: Watermark — visible text, invisible tracking mark, per-recipient copies, and a mark checker. */
+/* Patram tool: Watermark — visible text, invisible tracking mark, per-recipient copies, and a mark checker. */
 (function (PL) {
   PL.register('watermark', function (root) {
     let file = null, tab = 'add', running = false, ac = null;
@@ -28,7 +28,7 @@
 
     /* ── check ── */
     const chkBox = PL.el('div');
-    chkBox.appendChild(PL.el('div', 'note', 'Drop a PDF to see whether it carries a PaperLab invisible mark and which tag it holds. Only files marked by PaperLab can be read.'));
+    chkBox.appendChild(PL.el('div', 'note', 'Drop a PDF to see whether it carries a Patram invisible mark and which tag it holds. Only files marked by Patram can be read.'));
     root.appendChild(chkBox);
 
     const actions = PL.el('div', 'actions');
@@ -68,7 +68,7 @@
           res.innerHTML = '<div class="rsz"><b class="to"></b></div><div class="rnote"></div><ul class="issues"></ul>';
           const ul = res.querySelector('.issues'), li = t => { const e = PL.el('li'); e.textContent = t; ul.appendChild(e); };
           if (!r.info && !r.tags.length) {
-            res.querySelector('.to').textContent = 'No PaperLab mark found';
+            res.querySelector('.to').textContent = 'No Patram mark found';
             res.querySelector('.rnote').textContent = 'The file is unmarked, or the mark was removed (printing, rasterising or a metadata-stripping tool).';
           } else {
             res.querySelector('.to').textContent = 'Marked: ' + (r.tags.map(t => t.tag).join(', ') || r.info);
