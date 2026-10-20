@@ -53,9 +53,10 @@ paperlab/
 | Group | Tool | Engine |
 |---|---|---|
 | Page ops | Merge, Split, Organize, Rotate all | `pdf-lib` + `pdf.js` |
-| Convert | Images → PDF, PDF → Images, **E-books & comics (EPUB ⇄ PDF, CBZ ⇄ PDF)** | `pdf-lib` / `pdf.js` / `fflate` |
+| Convert | Images → PDF, PDF → Images, **PDF → Word / Excel / PowerPoint**, **Scan to PDF (camera or photos)**, **E-books & comics (EPUB ⇄ PDF, CBZ ⇄ PDF)** | `pdf-lib` / `pdf.js` / `fflate` |
 | Optimize & mark | **Compress to target (100 KB / 200 KB / 300 KB / 1 MB / custom / manual)**, **Watermark (visible, invisible tracking mark, per-recipient copies, mark checker)**, Page numbers / Bates | `pdf-lib` + `pdf.js` |
 | Read & inspect | Extract text, Metadata | `pdf.js` / `pdf-lib` |
+| Security | **Password-protect (AES-256, print/copy/edit limits) and Unlock** (with the password you supply) | `qpdf` → WebAssembly (vendored, ISC) |
 | Power tools | **Searchable (OCR → searchable PDF)**, **Mass Batch**, **Compare PDFs**, **Repair PDF** | Tesseract.js, `fflate`, `pdf.js` |
 
 ### Searchable (OCR)
@@ -78,6 +79,18 @@ Ladder, stopping at the first rung that passes verification: (1) pdf-lib re-save
 ### Watermark: visible, invisible, both
 Visible text (tiled or diagonal), an **invisible tracking mark** (document-information entry + zero-opacity text on every page, with a checksum), one **marked copy per recipient** (ZIP + `recipients.csv`), and a **Check a file** tab that reads the mark back. Marks do not survive printing / rasterising; the UI and policy say so.
 
+### PDF → Word, Excel, PowerPoint
+Layout analysis (columns, headings, tables, pictures, repeated headers/footers) in `js/convert/layout.js`; hand-built OOXML writers in `js/convert/ooxml.js`. Optional OCR for scanned pages. Also available in Mass Batch (group *Office*). Two-column or skewed scans can mix columns; right-to-left text is not handled; vector charts stay as a picture behind the text in PowerPoint.
+
+### Scan to PDF
+Camera (`getUserMedia`, needs HTTPS) or photo import; auto edge detection, draggable corners, perspective correction, Enhanced / Grayscale / B&W filters, rotate, reorder, optional OCR. Nothing leaves the device.
+
+### Password protect / unlock
+Uses QPDF compiled to WebAssembly. Unlock needs the password you supply — there is no cracking. A forgotten password cannot be recovered.
+
+### Visitor counter
+`js/visitors.js` uses Abacus with CountAPI-clone fallback (counterapi.dev v1 was shut down on 7 Aug 2026). Set `BASELINE` to continue from your old total.
+
 ### E-books & comics
 `EPUB → PDF` (own typesetter: selectable text, headings, lists, tables, images, bookmarks, page numbers; Latin via Noto Serif, Indian scripts via the bundled Noto fonts), `CBZ → PDF` (JPEGs embedded untouched, natural page order), `PDF → EPUB 3` (reflowable text or fixed-layout page images; validated with epubcheck), `PDF → CBZ` (with ComicInfo.xml). DRM-protected EPUBs are refused; CBR/RAR is not supported; right-to-left text is not laid out yet.
 
@@ -93,8 +106,7 @@ Verified with Playwright (desktop 1366×820 and iPhone-sized emulation), poppler
 
 - Very small targets (e.g. 100 KB) on long vector/text PDFs may only be reachable by flattening pages; the tool reports when a target is not reachable.
 - OCR quality depends on scan quality; noisy photos may be skipped. First use downloads nothing (data is bundled), but the repo is ~32 MB.
-- Password-protected PDFs are reported as failed (encryption/decryption is not available in-browser yet).
-- High-fidelity PDF → Word/Excel and true (destructive) redaction are out of scope.
+- PDF → Word/Excel/PPT is best-effort layout reconstruction, not pixel-perfect; true (destructive) redaction is out of scope.
 
 ## Deploy (GitHub Pages)
 
