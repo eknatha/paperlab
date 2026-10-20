@@ -4,30 +4,12 @@
 window.PaperLab = window.PaperLab || { tools: {} };
 
 (function (PL) {
-  const BASE = 'Use it only on files you own or are authorised to handle — never to forge, tamper with or misrepresent documents, or to bypass protections you have no right to remove.';
-  const EXTRA = {
-    watermark: 'Invisible marks are for tracing <b>your own</b> documents to the person you sent them to. Tell recipients their copy is individually marked — do not use marks to track people without their knowledge.',
-    meta: 'Stripping metadata is fine for your own privacy. Do not use it to hide where a document came from, or to disguise that it was altered.',
-    repair: 'Repair recovers <b>your own</b> damaged files. It does not bypass passwords or permissions, and recovered content should be checked before you rely on it.',
-    secure: 'Protect your own files. Unlocking works <b>only with the password you supply</b> — Patram cannot and will not guess, crack or bypass passwords. Do not remove protection from documents you have no right to open or change.',
-    scan: 'Scan only documents you own or may copy. Photos stay on your device. Check the result is legible before you discard the original — especially for legal, tax or identity papers.',
-    office: 'Converting does not give you rights to the content: copy, edit and share only documents you own or may reuse. Check the result against the original before relying on it — numbers, names and legal text especially.',
-    books: 'Convert only books and comics you own or are licensed to use. Patram <b>refuses DRM-protected files</b> and will never remove DRM. Respect authors’ copyright.',
-    searchable: 'Scans often contain personal data. Process only documents you are entitled to, and store the searchable output as carefully as the original.',
-    compare: 'Compare only documents you are entitled to review. A difference report is a lead, not legal proof.',
-    compress: 'Compression can reduce legibility. Check the result before submitting official or legal documents, and never change their content.',
-    extract: 'Respect copyright and confidentiality when copying text out of documents.',
-    numbers: 'Do not renumber or restamp pages to alter an official record or evidence.',
-    batch: 'Batch runs touch <b>every</b> file you add — double-check the operation and keep the originals. Do not process other people’s files without permission.',
-    organize: 'Do not reorder or remove pages to misrepresent a document.',
-    split: 'Do not split or extract pages to misrepresent a document or share material you are not allowed to share.',
-    merge: 'Do not combine documents to create a misleading or forged record.'
-  };
   PL.caution = function (id) {
     const box = document.createElement('div');
     box.className = 'caution'; box.setAttribute('role', 'note');
-    box.innerHTML = '<span class="cico" aria-hidden="true">⚠</span><div><b>Use responsibly.</b> ' + (EXTRA[id] ? EXTRA[id] + ' ' : '') + BASE +
-      ' <a href="responsible-use.html" target="_blank" rel="noopener">Responsible-use policy</a></div>';
+    const en = (PL.i18nData && PL.i18nData.en) || {};
+    box.innerHTML = '<span class="cico" aria-hidden="true">⚠</span><div><b>' + PL.t('use_resp') + '</b> ' + (en['c_' + id] ? PL.t('c_' + id) + ' ' : '') + PL.t('c_base') +
+      ' <a href="responsible-use.html" target="_blank" rel="noopener">' + PL.t('pol') + '</a></div>';
     return box;
   };
 

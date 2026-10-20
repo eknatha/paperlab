@@ -79,7 +79,7 @@ window.PaperLab = window.PaperLab || { tools: {} };
 
   PL.dropZone = function (onFiles, accept, multi) {
     const d = PL.el('div', 'drop',
-      'Drop file' + (multi ? 's' : '') + ' here or <b>browse</b><div class="hint">processed locally · nothing uploaded</div>');
+      PL.t(multi ? 'drop2' : 'drop1') + '<div class="hint">' + PL.t('drop_hint') + '</div>');
     const inp = PL.el('input');
     inp.type = 'file'; inp.accept = accept; inp.multiple = !!multi; inp.style.display = 'none';
     d.appendChild(inp);
@@ -97,13 +97,13 @@ window.PaperLab = window.PaperLab || { tools: {} };
   PL.logger = function (parent) {
     const l = PL.el('div', 'log');
     parent.appendChild(l);
-    return { set: (m, cls) => { l.innerHTML = cls ? `<span class="${cls}">${m}</span>` : m; } };
+    return { set: (m, cls) => { m = PL.tr(m); l.innerHTML = cls ? `<span class="${cls}">${m}</span>` : m; } };
   };
 
   PL.download = function (bytes, name, type) {
     const blob = bytes instanceof Blob ? bytes : new Blob([bytes], { type: type || 'application/pdf' });
     const url = URL.createObjectURL(blob);
-    const a = PL.el('a', null, '<span class="nm"></span><span class="dl">↓ download</span>');
+    const a = PL.el('a', null, '<span class="nm"></span><span class="dl">' + PL.t('dl') + '</span>');
     a.firstChild.textContent = name;                 // filenames come from the user — never inject as HTML
     a.href = url; a.download = name;
     return a;

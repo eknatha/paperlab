@@ -12,7 +12,7 @@
     const builder = PL.tools[tool.id];
     if (PL.cleanup) { try { PL.cleanup(); } catch (e) { /* ignore */ } }
     PL.busy = null; PL.cleanup = null;
-    wsTitle.textContent = tool.t;
+    wsTitle.textContent = PL.tr(tool.t);
     wsIco.textContent = tool.ico;
     wsBody.innerHTML = '';
     if (PL.caution) wsBody.appendChild(PL.caution(tool.id));          // responsible-use notice, always on top
@@ -76,7 +76,7 @@
       c.innerHTML =
         '<span class="go">→</span>' +
         `<div class="pico">${tool.ico}</div>` +
-        `<h3>${tool.t}</h3><p>${tool.d}</p>`;
+        `<h3>${PL.tr(tool.t)}</h3><p>${PL.tr(tool.d)}</p>`;
       activate(c, tool);
       row.appendChild(c);
     });
@@ -89,7 +89,7 @@
     if (item.primary) return;
     if (item.g) {
       const sec = PL.el('div', 'section');
-      sec.innerHTML = `<div class="sec-head"><h2>${item.g}</h2><span class="rule"></span></div>`;
+      sec.innerHTML = `<div class="sec-head"><h2>${PL.groupT(item.g)}</h2><span class="rule"></span></div>`;
       curGrid = PL.el('div', 'grid');
       sec.appendChild(curGrid);
       grid.appendChild(sec);
@@ -98,10 +98,11 @@
     const c = PL.el('div', 'card' + (item.soon ? ' soon' : ''));
     c.innerHTML =
       (item.soon ? '<span class="badge">soon</span>' : '<span class="arrow">→</span>') +
-      `<div class="top"><span class="ico">${item.ico}</span><h3>${item.t}</h3></div>` +
-      `<p>${item.d}</p>`;
+      `<div class="top"><span class="ico">${item.ico}</span><h3>${PL.tr(item.t)}</h3></div>` +
+      `<p>${PL.tr(item.d)}</p>`;
     if (!item.soon) activate(c, item);
     (curGrid || grid).appendChild(c);
   });
   if (PL.initEthicsBar) PL.initEthicsBar();
+  if (PL.i18nApply) PL.i18nApply(document.body);   // data-i18n elements that need the tool count
 })(window.PaperLab);

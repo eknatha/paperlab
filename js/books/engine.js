@@ -307,7 +307,7 @@ window.PaperLab = window.PaperLab || { tools: {} };
     }
     latin(style) {
       const name = { r: 'Regular', b: 'Bold', i: 'Italic', bi: 'BoldItalic' }[style] || 'Regular';
-      return this.get('serif-' + name, () => fetch('vendor/fonts/NotoSerif-' + name + '.woff?v=20261020b').then(r => { if (!r.ok) throw new Error('Font file missing: NotoSerif-' + name); return r.arrayBuffer(); }).then(b => new Uint8Array(b)));
+      return this.get('serif-' + name, () => fetch('vendor/fonts/NotoSerif-' + name + '.woff?v=20261020c').then(r => { if (!r.ok) throw new Error('Font file missing: NotoSerif-' + name); return r.arrayBuffer(); }).then(b => new Uint8Array(b)));
     }
     script(sc) { return this.get('script-' + sc, () => PL.ocr._loadFontBytes(sc)); }
     /* fontkit's shaper is right for drawing but can crash on some Noto subsets: fall back to 1:1 glyph mapping */

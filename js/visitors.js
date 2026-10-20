@@ -34,7 +34,7 @@
   }
   function setToday(n) {
     if (!todayEl) return;
-    todayEl.textContent = '+' + fmt(n) + ' today';
+    todayEl.textContent = '+' + fmt(n) + ' ' + (window.PaperLab && PaperLab.t ? PaperLab.t('today') : 'today');
   }
 
   // ── TODAY count (localStorage, once per day per browser) ──

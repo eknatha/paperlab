@@ -6,7 +6,7 @@ window.PaperLab = window.PaperLab || { tools: {} };
 
 (function (PL) {
   const S = PL.secure = {};
-  const V = '?v=20261020b';
+  const V = '?v=20261020c';
   let factory = null, wasm = null;
 
   async function boot() {
