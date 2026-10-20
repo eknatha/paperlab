@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PaperLab — Offline PDF Toolkit</title>
-<meta name="description" content="PaperLab — free offline PDF toolkit. Compress to 100 KB / 200 KB / 300 KB / 1 MB, OCR in Hindi, Telugu, Tamil & more, compare PDFs, mass batch. No uploads, runs entirely in your browser.">
-<link rel="stylesheet" href="css/styles.css?v=20261020a">
+<title>Patram — Offline PDF Toolkit</title>
+<meta name="description" content="Patram — free offline PDF toolkit. Compress to 100 KB / 200 KB / 300 KB / 1 MB, OCR in Hindi, Telugu, Tamil & more, compare PDFs, mass batch. No uploads, runs entirely in your browser.">
+<link rel="stylesheet" href="css/styles.css?v=20261020b">
 </head>
 <body>
 <div class="gradient-bg"></div>
@@ -13,7 +13,7 @@
 
 <header>
   <div class="topbar">
-    <div class="brand"><span class="mk">▤</span>Paper<span class="lab">Lab</span></div>
+    <div class="brand"><span class="mk">▤</span>Pat<span class="lab">ram</span></div>
     <div class="nav-tag">
       <span class="pill"><b>100%</b> offline</span>
       <span class="pill">no uploads</span>
@@ -27,7 +27,7 @@
 </header>
 
 <div class="ethics-bar" id="ethicsBar" hidden>
-  <div class="wrap"><span><b>Use responsibly.</b> PaperLab is for files you own or are authorised to handle &mdash; not for forging, tampering with or bypassing protection on other people&rsquo;s documents. <a href="responsible-use.html">Read the policy</a></span><button type="button" class="btn ghost sm">Got it</button></div>
+  <div class="wrap"><span><b>Use responsibly.</b> Patram is for files you own or are authorised to handle &mdash; not for forging, tampering with or bypassing protection on other people&rsquo;s documents. <a href="responsible-use.html">Read the policy</a></span><button type="button" class="btn ghost sm">Got it</button></div>
 </div>
 
 <div class="wrap">
@@ -59,7 +59,7 @@
 <footer>
   <div class="wrap">
     Part of the <b>EknathaLabs</b> ecosystem &middot; offline-first tools &middot; <a href="https://eknathalabs.com">eknathalabs.com</a>
-    <div class="legal">Use PaperLab only on files you own or are authorised to handle. You are responsible for how you use it &middot; <a href="responsible-use.html">Responsible-use policy</a> &middot; provided &ldquo;as is&rdquo;, no warranty.</div>
+    <div class="legal">Use Patram only on files you own or are authorised to handle. You are responsible for how you use it &middot; <a href="responsible-use.html">Responsible-use policy</a> &middot; provided &ldquo;as is&rdquo;, no warranty.</div>
     <div class="sib">sibling project &mdash; <a href="https://imagelab.eknathalabs.com">ImageLab</a>, the image toolkit</div>
   </div>
 </footer>
@@ -76,56 +76,56 @@
 </div>
 
 <!-- PDF engines (vendored → the whole site works with no network once loaded) -->
-<script src="vendor/pdf-lib.min.js?v=20261020a"></script>
-<script src="vendor/pdf.min.js?v=20261020a"></script>
-<script src="vendor/fflate.js?v=20261020a"></script>
+<script src="vendor/pdf-lib.min.js?v=20261020b"></script>
+<script src="vendor/pdf.min.js?v=20261020b"></script>
+<script src="vendor/fflate.js?v=20261020b"></script>
 
 <!-- core -->
-<script src="js/helpers.js?v=20261020a"></script>
-<script src="js/mark/mark.js?v=20261020a"></script>
-<script src="js/ops.js?v=20261020a"></script>
-<script src="js/registry.js?v=20261020a"></script>
+<script src="js/helpers.js?v=20261020b"></script>
+<script src="js/mark/mark.js?v=20261020b"></script>
+<script src="js/ops.js?v=20261020b"></script>
+<script src="js/registry.js?v=20261020b"></script>
 
 <!-- engines: Mass Batch · target-size compression · OCR (tesseract + fontkit load lazily) · compare -->
-<script src="js/batch/engine.js?v=20261020a"></script>
-<script src="js/batch/sink.js?v=20261020a"></script>
-<script src="js/compress/engine.js?v=20261020a"></script>
-<script src="js/ocr/engine.js?v=20261020a"></script>
-<script src="js/ocr/searchable.js?v=20261020a"></script>
-<script src="js/compare/diff.js?v=20261020a"></script>
-<script src="js/repair/engine.js?v=20261020a"></script>
-<script src="js/books/engine.js?v=20261020a"></script>
-<script src="js/secure/engine.js?v=20261020a"></script>
-<script src="js/scan/engine.js?v=20261020a"></script>
-<script src="js/convert/layout.js?v=20261020a"></script>
-<script src="js/convert/ooxml.js?v=20261020a"></script>
-<script src="js/convert/engine.js?v=20261020a"></script>
+<script src="js/batch/engine.js?v=20261020b"></script>
+<script src="js/batch/sink.js?v=20261020b"></script>
+<script src="js/compress/engine.js?v=20261020b"></script>
+<script src="js/ocr/engine.js?v=20261020b"></script>
+<script src="js/ocr/searchable.js?v=20261020b"></script>
+<script src="js/compare/diff.js?v=20261020b"></script>
+<script src="js/repair/engine.js?v=20261020b"></script>
+<script src="js/books/engine.js?v=20261020b"></script>
+<script src="js/secure/engine.js?v=20261020b"></script>
+<script src="js/scan/engine.js?v=20261020b"></script>
+<script src="js/convert/layout.js?v=20261020b"></script>
+<script src="js/convert/ooxml.js?v=20261020b"></script>
+<script src="js/convert/engine.js?v=20261020b"></script>
 
 <!-- tools (each self-registers into PaperLab.tools) -->
-<script src="js/tools/merge.js?v=20261020a"></script>
-<script src="js/tools/split.js?v=20261020a"></script>
-<script src="js/tools/organize.js?v=20261020a"></script>
-<script src="js/tools/rotate.js?v=20261020a"></script>
-<script src="js/tools/img2pdf.js?v=20261020a"></script>
-<script src="js/tools/pdf2img.js?v=20261020a"></script>
-<script src="js/tools/compress.js?v=20261020a"></script>
-<script src="js/tools/watermark.js?v=20261020a"></script>
-<script src="js/tools/numbers.js?v=20261020a"></script>
-<script src="js/tools/extract.js?v=20261020a"></script>
-<script src="js/tools/meta.js?v=20261020a"></script>
-<script src="js/tools/searchable.js?v=20261020a"></script>
-<script src="js/tools/batch.js?v=20261020a"></script>
-<script src="js/tools/compare.js?v=20261020a"></script>
-<script src="js/tools/repair.js?v=20261020a"></script>
-<script src="js/tools/books.js?v=20261020a"></script>
-<script src="js/tools/secure.js?v=20261020a"></script>
-<script src="js/tools/scan.js?v=20261020a"></script>
-<script src="js/tools/office.js?v=20261020a"></script>
+<script src="js/tools/merge.js?v=20261020b"></script>
+<script src="js/tools/split.js?v=20261020b"></script>
+<script src="js/tools/organize.js?v=20261020b"></script>
+<script src="js/tools/rotate.js?v=20261020b"></script>
+<script src="js/tools/img2pdf.js?v=20261020b"></script>
+<script src="js/tools/pdf2img.js?v=20261020b"></script>
+<script src="js/tools/compress.js?v=20261020b"></script>
+<script src="js/tools/watermark.js?v=20261020b"></script>
+<script src="js/tools/numbers.js?v=20261020b"></script>
+<script src="js/tools/extract.js?v=20261020b"></script>
+<script src="js/tools/meta.js?v=20261020b"></script>
+<script src="js/tools/searchable.js?v=20261020b"></script>
+<script src="js/tools/batch.js?v=20261020b"></script>
+<script src="js/tools/compare.js?v=20261020b"></script>
+<script src="js/tools/repair.js?v=20261020b"></script>
+<script src="js/tools/books.js?v=20261020b"></script>
+<script src="js/tools/secure.js?v=20261020b"></script>
+<script src="js/tools/scan.js?v=20261020b"></script>
+<script src="js/tools/office.js?v=20261020b"></script>
 
 <!-- app boot + hero demo + visitors -->
-<script src="js/ethics.js?v=20261020a"></script>
-<script src="js/app.js?v=20261020a"></script>
-<script src="js/hero-demo.js?v=20261020a"></script>
-<script src="js/visitors.js?v=20261020a"></script>
+<script src="js/ethics.js?v=20261020b"></script>
+<script src="js/app.js?v=20261020b"></script>
+<script src="js/hero-demo.js?v=20261020b"></script>
+<script src="js/visitors.js?v=20261020b"></script>
 </body>
 </html>

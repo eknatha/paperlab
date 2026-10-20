@@ -1,10 +1,10 @@
-# PaperLab
+# Patram
 
 Offline PDF toolkit — part of the [EknathaLabs](https://eknathalabs.com) ecosystem.
 
 **No uploads. No backend. Every operation runs entirely in your browser.**
 
-Live: [paperlab.eknathalabs.com](https://paperlab.eknathalabs.com)
+Live: [patram.eknathalabs.com](https://patram.eknathalabs.com)
 
 ## Architecture
 
@@ -17,7 +17,7 @@ paperlab/
 ├── css/
 │   └── styles.css          # all styling
 ├── js/
-│   ├── helpers.js          # PaperLab namespace + shared utils (el, dropZone, download…)
+│   ├── helpers.js          # Patram namespace + shared utils (el, dropZone, download…)
 │   ├── registry.js         # tool metadata (id, icon, title, group)
 │   ├── app.js              # grid render + workspace modal + boot
 │   └── tools/              # one file per tool, each calls PaperLab.register(id, fn)
@@ -110,7 +110,7 @@ Verified with Playwright (desktop 1366×820 and iPhone-sized emulation), poppler
 
 ## Deploy (GitHub Pages)
 
-1. Push to the `paperlab` repo.
+1. Push to the repo (still `eknatha/paperlab`; renaming it to `patram` in GitHub settings is optional — GitHub redirects the old URL and the issues link keeps working).
 2. Settings → Pages → deploy from `main` / root.
-3. DNS: add CNAME record `paperlab` → `eknatha.github.io`.
+3. DNS: add CNAME record `patram` → `eknatha.github.io`.
 4. The `CNAME` file binds the custom domain; `.nojekyll` keeps Pages from filtering paths.
