@@ -88,6 +88,9 @@ Camera (`getUserMedia`, needs HTTPS) or photo import; auto edge detection, dragg
 ### Password protect / unlock
 Uses QPDF compiled to WebAssembly. Unlock needs the password you supply — there is no cracking. A forgotten password cannot be recovered.
 
+### Languages
+English, हिन्दी, తెలుగు, தமிழ், ಕನ್ನಡ, മലയാളം, मराठी, বাংলা, ଓଡ଼ିଆ, ਪੰਜਾਬੀ, Español, Русский — picker in the top bar (saved in the browser; defaults to the browser language). Strings are in `js/i18n/<code>.js` (id → text, English in `en.js`); `js/i18n.js` translates the page, tool cards, tool controls, status messages and the responsible-use cautions. Anything without a translation stays in English. To add a language: copy `en.js`, translate the values, add the code to `LANGS` in `js/i18n.js`. Translations were machine-drafted — have a native speaker review them, the usage cautions especially.
+
 ### Visitor counter
 `js/visitors.js` uses Abacus with CountAPI-clone fallback (counterapi.dev v1 was shut down on 7 Aug 2026). Set `BASELINE` to continue from your old total.
 
